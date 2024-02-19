@@ -32,13 +32,13 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""type"": ""Value"",
                     ""id"": ""87981ea2-a132-4fc0-beac-7bdcba98300f"",
                     ""expectedControlType"": ""Stick"",
-                    ""processors"": """",
+                    ""processors"": ""StickDeadzone(min=0.1,max=1)"",
                     ""interactions"": """",
                     ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Dash"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""b0e3dc5a-6cc7-4ce9-9bcd-6f5daad3c93d"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",

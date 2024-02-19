@@ -637,6 +637,103 @@ Transform:
   - {fileID: 1799975833}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1014353886
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1014353888}
+  - component: {fileID: 1014353890}
+  - component: {fileID: 1014353889}
+  m_Layer: 0
+  m_Name: Input Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1014353888
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1014353886}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1014353889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1014353886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c70d684a3afe3bf42aaa76ed6375fbfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _moveInput: {x: 0, y: 0}
+  _dashInput: 0
+--- !u!114 &1014353890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1014353886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: cee81fee071479e459f3d9f80d26f102, type: 3}
+  m_NotificationBehavior: 3
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 87981ea2-a132-4fc0-beac-7bdcba98300f
+    m_ActionName: Movements/Move[/DualShock4GamepadHID/leftStick,/Keyboard/z,/Keyboard/s,/Keyboard/q,/Keyboard/d,/Keyboard/upArrow,/Keyboard/downArrow,/Keyboard/leftArrow,/Keyboard/rightArrow]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: b0e3dc5a-6cc7-4ce9-9bcd-6f5daad3c93d
+    m_ActionName: Movements/Dash[/DualShock4GamepadHID/buttonWest,/Keyboard/space]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Movements
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &1465242837
 GameObject:
   m_ObjectHideFlags: 0
@@ -649,9 +746,7 @@ GameObject:
   - component: {fileID: 1465242839}
   - component: {fileID: 1465242838}
   - component: {fileID: 1465242845}
-  - component: {fileID: 1465242844}
   - component: {fileID: 1465242842}
-  - component: {fileID: 1465242843}
   - component: {fileID: 1465242841}
   m_Layer: 0
   m_Name: Player
@@ -784,11 +879,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be465e693da2c984ca94fff18d13e394, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movementSpeed: 200
-  _rotateSpeed: 100
-  _stickDeadZone: 0.05
+  _movementSpeed: 8
+  _canMoveDuringDash: 1
+  _dashMoveTime: 1
+  _dashMoveMaxAngle: 30
   _dashCooldown: 1
-  _dashRotateSpeed: 100
   _dashCurve:
     serializedVersion: 2
     m_Curve:
@@ -802,7 +897,7 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.5
+      time: 1
       value: 1
       inSlope: 0
       outSlope: 0
@@ -810,20 +905,14 @@ MonoBehaviour:
       weightedMode: 0
       inWeight: 0
       outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: -1.9811316
-      outSlope: -1.9811316
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.100000024
-      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _dashDuration: 0.3
-  _dashSpeed: 800
+  _dashLenght: 3
+  _dashDuration: 0.5
+  _showDebug: 1
+  _dashLineDebugColor: {r: 0, g: 0.008023262, b: 1, a: 1}
+  _dashTargetPosDebugColor: {r: 0.94718194, g: 1, b: 0, a: 1}
 --- !u!114 &1465242842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -836,48 +925,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d3568a8eec9f1e40812af4e8f67172a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1465242843
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1465242837}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c70d684a3afe3bf42aaa76ed6375fbfc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1465242844
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1465242837}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: cee81fee071479e459f3d9f80d26f102, type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Movements
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
+  _inputManager: {fileID: 1014353889}
 --- !u!50 &1465242845
 Rigidbody2D:
   serializedVersion: 4
@@ -1169,6 +1217,7 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1014353888}
   - {fileID: 519420032}
   - {fileID: 619394802}
   - {fileID: 724511557}

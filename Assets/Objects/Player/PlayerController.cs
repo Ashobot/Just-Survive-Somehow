@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UltimateAttributesPack;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,13 +10,14 @@ public class PlayerController : MonoBehaviour
     // Player components
     public PlayerMovement PlayerMovement { get { return _playerMovement; } }
     PlayerMovement _playerMovement;
-    public PlayerInputs PlayerInputs { get { return _playerInputs; } }
-    PlayerInputs _playerInputs;
+
+    // Other components
+    public InputsManager InputManager { get { return _inputManager; } }
+    [SerializeField, Required(true)] InputsManager _inputManager;
 
     private void Awake()
     {
         _playerMovement = GetComponent<PlayerMovement>();
-        _playerInputs = GetComponent<PlayerInputs>();
     }
 
 }
