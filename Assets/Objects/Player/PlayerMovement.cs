@@ -18,10 +18,19 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody2D _rb;
     SpriteRenderer _sr;
 
+    // Rotations
+    [Title("Rotations", "white", "green")]
+
+    [SerializeField] Transform _currentRotator;
+    public Transform CurrentRotator { get { return _currentRotator; } }
+    [SerializeField] Transform _targetRotator;
+    public Transform Transform { get { return _targetRotator; } }   
+
     // Movement
     [Title("Movement", "white", "light blue")]
 
     [SerializeField, MinValue(0)] float _movementSpeed = 200f;
+    public float MovementSpeed { get { return _movementSpeed; } }
     [SerializeField] bool _smoothChangeDirection;
     [SerializeField, ShowIf(nameof(_smoothChangeDirection), true), MinValue(0)] float _moveChangeDirectionSpeed = 5f;
     bool _isMoving;
@@ -29,21 +38,23 @@ public class PlayerMovement : MonoBehaviour
     // Dash
     [Title("Dash", "white", "blue")]
 
+    [Space]
     [SerializeField] bool _canChangeDirectionDuringDash = true;
-    [SerializeField, ShowIf(nameof(_canChangeDirectionDuringDash), true)] Transform _currentRotator;
-    [SerializeField, ShowIf(nameof(_canChangeDirectionDuringDash), true)] Transform _targetRotator;
     [SerializeField, ShowIf(nameof(_canChangeDirectionDuringDash), true), MinValue(0)] float _dashChangeDirectionSpeed = 0.75f;
     [Space]
     [SerializeField, MinValue(0)] float _dashCooldown = 1f;
     [Line("blue")]
     [SerializeField] AnimationCurve _dashCurve;
     [SerializeField, MinValue(0)] float _dashLenght = 3f;
+    public float DashLenght { get { return _dashLenght; } }
     [SerializeField, MinValue(0)] float _dashDuration = 0.25f;
+    public float DashDuration { get { return _dashDuration; } }
     [Space]
     [SerializeField] Color _colorWhenDash;
     float _dashTimer = 0f;
     bool _canDash = true;
     bool _isDashing = false;
+    public bool IsDashing { get { return _isDashing; } }
     Vector2 _startDashPos;
     Vector2 _endDashPos;
     Vector2 _lastDashTargetEndPos;
@@ -200,6 +211,30 @@ public class PlayerMovement : MonoBehaviour
             _sr.color = _colorWhenDash;
         else
             _sr.color = _normalColor;
+    }
+
+    public Vector2 CalculateTargetZoneSpawn(float fullDeployTime, Precision precision)
+    {
+        Vector2 playerMoveDirection = _currentRotator.transform.up;
+        float randAngle = UnityEngine.Random.Range(-precision.precisionAngle, precision.precisionAngle);
+        Vector2 spawnDirectionFromPlayer = Quaternion.AngleAxis(randAngle / 2, Vector3.forward) * playerMoveDirection;
+        Vector2 spawnPosition = Vector2.zero;
+
+        if (_isDashing) // If player is dashing
+        {
+            float playerDashSpeed = _dashLenght / _dashDuration;
+            float spawnDistanceFromPlayer = playerDashSpeed * fullDeployTime;            
+            spawnPosition = (Vector2)transform.position + spawnDirectionFromPlayer * spawnDistanceFromPlayer * Time.deltaTime;
+        }
+        else // If player is not dashing
+        {
+            float playerMoveSpeed = _movementSpeed;            
+            float spawnDistanceFromPlayer = playerMoveSpeed * fullDeployTime;
+            Debug.Log(spawnDistanceFromPlayer + " ; " + spawnDirectionFromPlayer + " ; " + randAngle);
+            spawnPosition = (Vector2)transform.position + spawnDirectionFromPlayer * spawnDistanceFromPlayer * Time.deltaTime;
+        }
+
+        return spawnPosition;
     }
 
     // ----- Debug ----- //

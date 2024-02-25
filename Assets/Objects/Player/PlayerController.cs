@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
 
     // Other components
     public InputsManager InputManager { get { return _inputManager; } }
-    [SerializeField, Required(true)] InputsManager _inputManager;
+    [SerializeField, Required(false)] InputsManager _inputManager;
 
     private void Awake()
     {

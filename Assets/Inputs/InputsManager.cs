@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UltimateAttributesPack;
 
 [RequireComponent(typeof(PlayerInput))]
 public class InputsManager : MonoBehaviour
@@ -14,10 +15,10 @@ public class InputsManager : MonoBehaviour
     // Movement inputs
 
     public Vector2 MoveInput { get { return _moveInput; } }
-    [SerializeField] Vector2 _moveInput;
+    [SerializeField, ReadOnly] Vector2 _moveInput;
 
     public bool DashInput { get { return _dashInput; } }
-    [SerializeField] bool _dashInput;
+    [SerializeField, ReadOnly] bool _dashInput;
 
     private void OnEnable()
     {
