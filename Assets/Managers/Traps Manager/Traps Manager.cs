@@ -1,20 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 using UltimateAttributesPack;
 
 public class TrapsManager : MonoBehaviour
 {
     GameManager _gameManager;
-    
-    [Title("All Traps", "white", "orange")]
 
-    [SubTitle("BearTrap", "white", "orange")]
+    [Title("Falling traps", "white", "orange")]
 
+    [LineTitle("Bear trap")]
     [SerializeField] BearTrapParams[] _bearTrapsParams;
     BearTrapParams _currentBearTrapsParams;
     public BearTrapParams CurrentBearTrapsParams { get { return _currentBearTrapsParams; } }
+
+    [Title("Lasers", "white", "red")]
+
+    [LineTitle("Vertical laser")]
+    [SerializeField] VerticalLaserParams[] _verticalLaserParams;
+    VerticalLaserParams _currentVerticalLaserParams;
+    public VerticalLaserParams CurrentVerticalLaserParams { get { return _currentVerticalLaserParams;} }
+
 
     private void Awake()
     {
@@ -25,110 +31,81 @@ public class TrapsManager : MonoBehaviour
     private void Start()
     {
         // Initialize all the traps params to first wave params
-        InitializeTrapsParams();
+        SetTrapsParamsLevel(0);
     }
 
-    void InitializeTrapsParams()
+    /// <summary>
+    /// Set all traps params to difficulty level (in trap params list)
+    /// </summary>
+    public void SetTrapsParamsLevel(int levelIndex)
     {
-        _currentBearTrapsParams = _bearTrapsParams[0];
+        // Bear Trap
+        if (_bearTrapsParams[levelIndex] != null) _currentBearTrapsParams = _bearTrapsParams[levelIndex];
+        else Debug.LogWarning($"Bear Traps Params : difficulty level {levelIndex} is not set in Traps Manager");
+
+        // Vertical Laser
+        if (_verticalLaserParams[levelIndex] != null) _currentVerticalLaserParams = _verticalLaserParams[levelIndex];
+        else Debug.LogWarning($"Vertical Laser Params : difficulty level {levelIndex} is not set in Traps Manager");
     }
 
-    float CalculateFullDeployTimeOf(TrapType trapType)
+    // ---------- Traps Spawn ---------- //
+
+    /// <summary>
+    /// Spawns a random trap with current difficulty params
+    /// </summary>
+    /// <param name="difficultyParams">The difficulty params</param>
+    public void SpawnRandomTrap(DifficultyParams difficultyParams)
     {
-        float fullDeployTime = 0;
-        switch (trapType)
+        float rand = UnityEngine.Random.Range(0, 100);
+        float chancesSum = 0;
+
+        // Get random trap
+        for (int i = 0; i < difficultyParams.Traps.Length; i++)
         {
-            case TrapType.BearTrap:
-                fullDeployTime += Mathf.Lerp(_currentBearTrapsParams.FallDurationMin, _currentBearTrapsParams.FallDurationMax, _gameManager.GameLoopManager.CurrentWavePercent);
-                fullDeployTime += Mathf.Lerp(_currentBearTrapsParams.DeployDurationMin, _currentBearTrapsParams.DeployDurationMax, _gameManager.GameLoopManager.CurrentWavePercent);
-                break;
-            case TrapType.Laser:
-
-                break;
-            default:
-                break;
-        }
-        return fullDeployTime;
+            if (rand >= chancesSum && rand <= difficultyParams.Traps[i].percentChance + chancesSum)
+            {
+                if (difficultyParams.Traps[i].IsFallingTrap && !_gameManager.PlayerController.PlayerMovement.CanSpawnGroundTrapAround(difficultyParams.Traps[i].MaxTrapsAroundPlayer, difficultyParams.Traps[i].CheckTrapsAroundPlayerRadius))
+                {
+                    SpawnRandomNonGroundTrap(difficultyParams);
+                    return;
+                }
+                else
+                    Instantiate(difficultyParams.Traps[i].TrapPrefab, Vector2.zero, Quaternion.identity); // Spawn new trap
+            }
+            else
+                chancesSum += difficultyParams.Traps[i].percentChance;
+        }  
     }
 
-    public void SpawnTrap(TrapType trapType, SpawnType spawnType, Precision precision)
+    /// <summary>
+    /// Spawns a random non ground trap with current difficulty params
+    /// </summary>
+    /// <param name="difficultyParams">The difficulty params</param>
+    void SpawnRandomNonGroundTrap(DifficultyParams difficultyParams)
     {
-        // Calculate random spawn position
-        Vector2 spawnPosition = Vector2.zero;
-        switch (spawnType)
+        // Get all non ground traps in current difficulty params
+        float maxChance = 0f;
+        List<Trap> nonGroundTraps = new List<Trap>();
+        foreach(Trap trap in difficultyParams.Traps)
         {
-            case SpawnType.TargetZone:
-                spawnPosition = _gameManager.PlayerController.PlayerMovement.CalculateTargetZoneSpawn(CalculateFullDeployTimeOf(trapType), precision);
-                break;
-            case SpawnType.OnSide:
-
-                break;
-            default:
-                break;
+            if (!trap.IsFallingTrap)
+            {
+                nonGroundTraps.Add(trap);
+                maxChance += trap.percentChance;
+            }
         }
 
-        // spawn trap of type
-        switch (trapType)
+        // Get and instanciate random non ground trap
+        float rand = UnityEngine.Random.Range(0, maxChance);
+        float chancesSum = 0;
+        for (int i = 0; i < nonGroundTraps.Count; i++)
         {
-            case TrapType.BearTrap:
-                SpawnBearTrap(spawnPosition);
-                break;
-            case TrapType.Laser:
-
-                break;
-
-            default:
-                break;
+            if (rand >= chancesSum && rand <= nonGroundTraps[i].percentChance + chancesSum)
+                Instantiate(nonGroundTraps[i].TrapPrefab, Vector2.zero, Quaternion.identity); // Spawn new trap
+            else
+                chancesSum += nonGroundTraps[i].percentChance;
         }
     }
-
-    Vector2 CalculateRandomOnSideSpawn(SpawnSides spawnSides, Precision precision)
-    {
-        return Vector2.zero;
-    }
-
-    void SpawnBearTrap(Vector2 spawnPosition)
-    {
-        GameObject newTrap = GameObject.Instantiate(_bearTrapsParams[_gameManager.GameLoopManager.CurrentWave].Prefab, spawnPosition, Quaternion.identity); // Instanciate a new bear trap
-    }
-
-    // ----- Debug ----- //
-
-    private void OnDrawGizmos()
-    {
-        
-    }
-}
-
-// ----- Enums ----- //
-
-public enum SpawnType
-{
-    OnSide,
-    TargetZone
-}
-
-[Flags]
-public enum SpawnSides
-{
-    None = 0,
-    Left = 1 << 0,
-    Up = 1 << 1,
-    Right = 1 << 2,
-    Down = 1 << 3
-}
-
-public enum TrapType
-{
-    BearTrap,
-    Laser
-}
-
-public enum PrecisionType
-{
-    Precise,
-    NotPrecise,
-    Random
 }
 
 // ----- Serializable classes ----- //
@@ -136,17 +113,10 @@ public enum PrecisionType
 [Serializable]
 public class Trap
 {
-    public TrapType trapType;
-    public SpawnType spawnType;
-    public SpawnSides spawnSides;
+    public GameObject TrapPrefab;
     [MinValue(0), MaxValue(100), Indent(2)] public float percentChance;
-}
-
-[Serializable]
-public class Precision
-{
-    public PrecisionType precisionType;
-    [MinValue(0), MaxValue(100), Indent(4)] public float percentChance;
     [Space]
-    [MinValue(0), MaxValue(100), Indent(2)] public float precisionAngle;
+    public bool IsFallingTrap;
+    [MinValue(0)] public int MaxTrapsAroundPlayer;
+    [MinValue(0)] public float CheckTrapsAroundPlayerRadius;
 }

@@ -11,6 +11,7 @@ public class InputsManager : MonoBehaviour
 
     // Components
     PlayerControls _playerControls;
+    [SerializeField] UIManager _uiManager;
 
     // Movement inputs
 
@@ -31,15 +32,29 @@ public class InputsManager : MonoBehaviour
 
         // Enable dash input
         _playerControls.Movements.Dash.started += OnStartDash;
+        _playerControls.Movements.Dash.performed += OnDash;
+        _playerControls.Movements.Dash.canceled += OnEndDash;
+
+        // Enable menu pause input
+        _playerControls.Menus.MenuPause.started += OnMenuPause;
     }
 
     private void OnDisable()
     {
         _playerControls.Disable();
 
+        // Disable move input
         _playerControls.Movements.Move.started -= OnStartMove;
         _playerControls.Movements.Move.performed -= OnMove;
         _playerControls.Movements.Move.canceled -= OnEndMove;
+
+        // Disable dash input
+        _playerControls.Movements.Dash.started -= OnStartDash;
+        _playerControls.Movements.Dash.performed -= OnDash;
+        _playerControls.Movements.Dash.canceled -= OnEndDash;
+
+        // Disable menu pause input
+        _playerControls.Menus.MenuPause.started -= OnMenuPause;
     }
 
     private void Awake()
@@ -56,7 +71,7 @@ public class InputsManager : MonoBehaviour
 
     void OnMove(InputAction.CallbackContext ctx)
     {
-        _moveInput = ctx.ReadValue<Vector2>().normalized;
+        _moveInput = ctx.ReadValue<Vector2>();
     }
 
     void OnEndMove(InputAction.CallbackContext ctx)
@@ -79,6 +94,13 @@ public class InputsManager : MonoBehaviour
     void OnEndDash(InputAction.CallbackContext ctx)
     {
 
+    }
+
+    // ----- Menu pause input ----- //
+
+    void OnMenuPause(InputAction.CallbackContext ctx)
+    {
+        _uiManager.SetPauseMenu(!_uiManager.InPauseMenu);
     }
 
     public void DisableDashInput()

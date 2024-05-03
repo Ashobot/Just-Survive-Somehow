@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UltimateAttributesPack;
@@ -8,14 +6,13 @@ public class DifficultyManager : MonoBehaviour
 {
     GameManager _gameManager;
 
-    [SerializeField, MinValue(0)] int _currentDifficultyLevel;
+    [SerializeField, ReadOnly] int _currentDifficultyLevel;
 
-    [HelpBox("All the difficulty parameters per wave")]
+    [HelpBox("All the difficulty parameters for each wave")]
     [SerializeField] DifficultyParams[] _difficultyParams;
     DifficultyParams _currentDifficultyParams;
-    public DifficultyParams CurrentWaveDifficultyParams { get { return _currentDifficultyParams; } }
-
-    [SerializeField, ReadOnly] float _currentWaveTimer;
+    public DifficultyParams CurrentDifficultyParams { get { return _currentDifficultyParams; } }
+    [Space]
     [SerializeField, ReadOnly] float _currentTrapSpawnRate;
     [SerializeField, ReadOnly] float _currentSpawnTimer;
 
@@ -32,93 +29,58 @@ public class DifficultyManager : MonoBehaviour
 
     private void Update()
     {
-        ManageWave();
+        RefreshTrapSpawnRate();
         ManageTrapSpawn();
     }
 
-    public void SetDifficultyLevelTo(int level)
-    {
-        _currentDifficultyLevel = level;
-        _currentDifficultyParams = _difficultyParams[level];
-        _currentTrapSpawnRate = _currentDifficultyParams.TrapSpawnRateMin;
-        _currentWaveTimer = 0;
+    /// <summary>
+    ///  Increase the difficulty level to the next level
+    /// </summary>
+    public void IncreaseDifficultyLevel()
+    {        
+        _currentDifficultyLevel = Mathf.Clamp(_currentDifficultyLevel++, 0, _difficultyParams.Length - 1);
+        _currentDifficultyParams = _difficultyParams[_currentDifficultyLevel]; // Change difficulty params
+        _currentTrapSpawnRate = _currentDifficultyParams.TrapSpawnRateMin; // Set trap spawn rate to min of wave
+        _gameManager.GameLoopManager.ResetWaveTimer(); // Set wave timer to 0
+        _gameManager.TrapsManager.SetTrapsParamsLevel(_currentDifficultyLevel); // Set all traps params to the new difficulty level
     }
 
-    void ManageWave()
+    /// <summary>
+    /// Manage spawn rate during current wave with current difficulty params
+    /// </summary>
+    void RefreshTrapSpawnRate()
     {
-        if (_currentWaveTimer < _currentDifficultyParams.WaveDuration)
-        {
-            _currentTrapSpawnRate = Mathf.Lerp(_currentDifficultyParams.TrapSpawnRateMin, _currentDifficultyParams.TrapSpawnRateMax, _currentDifficultyParams.TrapSpawnRateCurve.Evaluate(_currentWaveTimer / _currentDifficultyParams.WaveDuration));
-            _currentWaveTimer += Time.deltaTime;
-        }
-        else
-        {
-            SetDifficultyLevelTo(_currentDifficultyLevel + 1);
-        }
+        _currentTrapSpawnRate = Mathf.Lerp(_currentDifficultyParams.TrapSpawnRateMin, _currentDifficultyParams.TrapSpawnRateMax, _currentDifficultyParams.TrapSpawnRateCurve.Evaluate(_gameManager.GameLoopManager.CurrentWavePercent));
     }
 
+    /// <summary>
+    /// Manage trap spawn timer with current trap spawn rate
+    /// </summary>
     void ManageTrapSpawn()
     {
-        float timeBetweenNewTrap = 1 / _currentTrapSpawnRate;
+        float timeBetweenNewTrap = 1 / _currentTrapSpawnRate; // Calculate current time between each trap spawn (in seconds)
 
+        // If next trap spawn timer is not finished
         if(_currentSpawnTimer < timeBetweenNewTrap)
         {
             _currentSpawnTimer += Time.deltaTime;
         }
+        // If timer is finished, spawn new trap and reset timer
         else
         {
-            SpawnRandomTrap();
-            _currentSpawnTimer = 0;
+            _gameManager.TrapsManager.SpawnRandomTrap(_currentDifficultyParams); // Spawn a random trap with current difficulty params
+            _currentSpawnTimer = 0; // Reset timer
         }
-    }
-
-    // Spawn random trap of the current wave difficulty
-    void SpawnRandomTrap()
-    {
-        TrapType trapType = TrapType.BearTrap;
-        SpawnType spawnType = SpawnType.TargetZone;
-        Precision precision = _currentDifficultyParams.SpawnPrecisions[0];
-
-        float rand = UnityEngine.Random.Range(0, 100);
-        float chancesSum = 0;
-
-        // Get random trap
-        for(int i = 0; i < _currentDifficultyParams.Traps.Length; i++)
-        {
-            if(rand >= chancesSum && rand <= _currentDifficultyParams.Traps[i].percentChance + chancesSum)
-            {
-                trapType = _currentDifficultyParams.Traps[i].trapType;
-                spawnType = _currentDifficultyParams.Traps[i].spawnType;
-            }
-            else
-            {
-                chancesSum += _currentDifficultyParams.Traps[i].percentChance;
-            }
-        }
-        // Get random precision
-        for (int i = 0; i < _currentDifficultyParams.SpawnPrecisions.Length; i++)
-        {
-            if (rand >= chancesSum && rand <= _currentDifficultyParams.SpawnPrecisions[i].percentChance + chancesSum)
-            {
-                precision = _currentDifficultyParams.SpawnPrecisions[i];
-            }
-            else
-            {
-                chancesSum += _currentDifficultyParams.SpawnPrecisions[i].percentChance;
-            }
-        }
-
-        // Spawn trap
-        _gameManager.TrapsManager.SpawnTrap(trapType, spawnType, precision);
     }
 }
+
+// ----- Serializable classes ----- //
 
 [Serializable]
 public class DifficultyParams
 {
     [MinValue(0), Suffix("Seconds")] public float WaveDuration;
     public Trap[] Traps;
-    public Precision[] SpawnPrecisions;
     [Space]
     public AnimationCurve TrapSpawnRateCurve;
     [MinValue(0), Suffix("Per second")] public float TrapSpawnRateMin;

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UltimateAttributesPack;
 
@@ -33,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
     public float MovementSpeed { get { return _movementSpeed; } }
     [SerializeField] bool _smoothChangeDirection;
     [SerializeField, ShowIf(nameof(_smoothChangeDirection), true), MinValue(0)] float _moveChangeDirectionSpeed = 5f;
+    [SerializeField] bool _normalizeMovement;
     bool _isMoving;
 
     // Dash
@@ -131,11 +130,11 @@ public class PlayerMovement : MonoBehaviour
         if(_inputsManager.MoveInput != Vector2.zero && !_isDashing)
         {
             _isMoving = true;
-     
+
             if(_smoothChangeDirection) // Smooth change direction when moving if it's activated
-                _rb.MovePosition((Vector2)transform.position + ((Vector2)_currentRotator.up * _movementSpeed * Time.deltaTime));
+                _rb.MovePosition((Vector2)transform.position + ((Vector2)_currentRotator.up * _movementSpeed * Time.deltaTime * (_normalizeMovement ? _inputsManager.MoveInput.magnitude : 1)));
             else
-                _rb.MovePosition((Vector2)transform.position + (_inputsManager.MoveInput * _movementSpeed * Time.deltaTime));
+                _rb.MovePosition((Vector2)transform.position + (_inputsManager.MoveInput * _movementSpeed * Time.deltaTime * (_normalizeMovement ? _inputsManager.MoveInput.magnitude : 1)));
         }
         else
             _isMoving = false;
@@ -202,6 +201,28 @@ public class PlayerMovement : MonoBehaviour
         _canDash = true;
     }
 
+    // ----- Trap check ----- //
+
+    /// <summary>
+    /// Checks if there is less than a certain number of ground trap around player
+    /// </summary>
+    /// <param name="count">The max count of ground traps around player</param>
+    public bool CanSpawnGroundTrapAround(int maxCount, float radius)
+    {
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, radius);
+        int groundTrapCount = 0;
+        if(cols.Length > 0)
+        {
+            foreach(Collider2D col in cols)
+            {
+                if (col.tag == "GroundTrap")
+                    groundTrapCount++;
+            }
+        }
+
+        return groundTrapCount < maxCount;
+    }
+
     // ----- Color ----- //
 
     void ManageColor()
@@ -213,31 +234,9 @@ public class PlayerMovement : MonoBehaviour
             _sr.color = _normalColor;
     }
 
-    public Vector2 CalculateTargetZoneSpawn(float fullDeployTime, Precision precision)
-    {
-        Vector2 playerMoveDirection = _currentRotator.transform.up;
-        float randAngle = UnityEngine.Random.Range(-precision.precisionAngle, precision.precisionAngle);
-        Vector2 spawnDirectionFromPlayer = Quaternion.AngleAxis(randAngle / 2, Vector3.forward) * playerMoveDirection;
-        Vector2 spawnPosition = Vector2.zero;
-
-        if (_isDashing) // If player is dashing
-        {
-            float playerDashSpeed = _dashLenght / _dashDuration;
-            float spawnDistanceFromPlayer = playerDashSpeed * fullDeployTime;            
-            spawnPosition = (Vector2)transform.position + spawnDirectionFromPlayer * spawnDistanceFromPlayer * Time.deltaTime;
-        }
-        else // If player is not dashing
-        {
-            float playerMoveSpeed = _movementSpeed;            
-            float spawnDistanceFromPlayer = playerMoveSpeed * fullDeployTime;
-            Debug.Log(spawnDistanceFromPlayer + " ; " + spawnDirectionFromPlayer + " ; " + randAngle);
-            spawnPosition = (Vector2)transform.position + spawnDirectionFromPlayer * spawnDistanceFromPlayer * Time.deltaTime;
-        }
-
-        return spawnPosition;
-    }
-
+    // ----------------- //
     // ----- Debug ----- //
+    // ----------------- //
 
     private void OnDrawGizmos()
     {

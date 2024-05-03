@@ -32,7 +32,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""type"": ""Value"",
                     ""id"": ""87981ea2-a132-4fc0-beac-7bdcba98300f"",
                     ""expectedControlType"": ""Stick"",
-                    ""processors"": ""StickDeadzone(min=0.1,max=1)"",
+                    ""processors"": ""StickDeadzone(min=0.05,max=0.7)"",
                     ""interactions"": """",
                     ""initialStateCheck"": true
                 },
@@ -191,6 +191,45 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Menus"",
+            ""id"": ""4e1ee175-f6b6-4677-bc25-41bb883ad6ff"",
+            ""actions"": [
+                {
+                    ""name"": ""MenuPause"",
+                    ""type"": ""Button"",
+                    ""id"": ""a84dea88-59e5-4f5a-b695-bf55e602b32a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""f26c6a58-d0bc-410f-9416-0ea4c39c739a"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""MenuPause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3b138113-25fc-4f01-94d1-0eb0ce38d38a"",
+                    ""path"": ""<keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""MenuPause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -222,6 +261,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Movements = asset.FindActionMap("Movements", throwIfNotFound: true);
         m_Movements_Move = m_Movements.FindAction("Move", throwIfNotFound: true);
         m_Movements_Dash = m_Movements.FindAction("Dash", throwIfNotFound: true);
+        // Menus
+        m_Menus = asset.FindActionMap("Menus", throwIfNotFound: true);
+        m_Menus_MenuPause = m_Menus.FindAction("MenuPause", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -333,6 +375,52 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         }
     }
     public MovementsActions @Movements => new MovementsActions(this);
+
+    // Menus
+    private readonly InputActionMap m_Menus;
+    private List<IMenusActions> m_MenusActionsCallbackInterfaces = new List<IMenusActions>();
+    private readonly InputAction m_Menus_MenuPause;
+    public struct MenusActions
+    {
+        private @PlayerControls m_Wrapper;
+        public MenusActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @MenuPause => m_Wrapper.m_Menus_MenuPause;
+        public InputActionMap Get() { return m_Wrapper.m_Menus; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(MenusActions set) { return set.Get(); }
+        public void AddCallbacks(IMenusActions instance)
+        {
+            if (instance == null || m_Wrapper.m_MenusActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_MenusActionsCallbackInterfaces.Add(instance);
+            @MenuPause.started += instance.OnMenuPause;
+            @MenuPause.performed += instance.OnMenuPause;
+            @MenuPause.canceled += instance.OnMenuPause;
+        }
+
+        private void UnregisterCallbacks(IMenusActions instance)
+        {
+            @MenuPause.started -= instance.OnMenuPause;
+            @MenuPause.performed -= instance.OnMenuPause;
+            @MenuPause.canceled -= instance.OnMenuPause;
+        }
+
+        public void RemoveCallbacks(IMenusActions instance)
+        {
+            if (m_Wrapper.m_MenusActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IMenusActions instance)
+        {
+            foreach (var item in m_Wrapper.m_MenusActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_MenusActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public MenusActions @Menus => new MenusActions(this);
     private int m_GamepadSchemeIndex = -1;
     public InputControlScheme GamepadScheme
     {
@@ -355,5 +443,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
+    }
+    public interface IMenusActions
+    {
+        void OnMenuPause(InputAction.CallbackContext context);
     }
 }

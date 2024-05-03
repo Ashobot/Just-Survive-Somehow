@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class ArenaManager : MonoBehaviour
 {
+    [SerializeField] LayerMask _wallsLayerMask;
+    public LayerMask WallsLayerMask { get { return _wallsLayerMask;} }
+    [Space]
     [SerializeField] GameObject _wallLeft;
     public GameObject WallLeft { get { return _wallLeft; } }
     [SerializeField] GameObject _wallUp;
@@ -12,8 +15,4 @@ public class ArenaManager : MonoBehaviour
     public GameObject WallRight { get { return _wallRight; } }
     [SerializeField] GameObject _wallDown;
     public GameObject WallDown { get { return _wallDown; } }
-
-
-
-
 }
