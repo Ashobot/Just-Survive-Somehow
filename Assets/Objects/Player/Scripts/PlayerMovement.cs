@@ -27,12 +27,20 @@ public class PlayerMovement : MonoBehaviour
     // Movement
     [Title("Movement", "white", "light blue")]
 
-    [SerializeField, MinValue(0)] float _movementSpeed = 200f;
+    [SerializeField, MinValue(0)] float _movementSpeed = 8f;
     public float MovementSpeed { get { return _movementSpeed; } }
+
+    [LineTitle("Damaged", "white", "light blue")]
+    [SerializeField, MinValue(0)] float _damagedMovementSpeed = 4f;
+    public float DamagedMovementSpeed { get { return _damagedMovementSpeed; } }
+    [SerializeField] AnimationCurve _damagedMovementSpeedRecuperationCurve;
+    public AnimationCurve DamagedMovementSpeedRecuperationCurve { get { return _damagedMovementSpeedRecuperationCurve; } }
+    [Space]
     [SerializeField] bool _smoothChangeDirection;
     [SerializeField, ShowIf(nameof(_smoothChangeDirection), true), MinValue(0)] float _moveChangeDirectionSpeed = 5f;
     [SerializeField] bool _normalizeMovement;
     bool _isMoving;
+    float _currentMovementSpeed;
 
     // Dash
     [Title("Dash", "white", "blue")]
@@ -44,10 +52,20 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField, MinValue(0)] float _dashCooldown = 1f;
     [Line("blue")]
     [SerializeField] AnimationCurve _dashCurve;
+    [Space]
     [SerializeField, MinValue(0)] float _dashLenght = 3f;
-    public float DashLenght { get { return _dashLenght; } }
+    public float DashLenght => _dashLenght;  
     [SerializeField, MinValue(0)] float _dashDuration = 0.25f;
-    public float DashDuration { get { return _dashDuration; } }
+    public float DashDuration => _dashDuration;
+    
+    [LineTitle("Damaged", "white", "blue")]
+    [SerializeField, MinValue(0)] float _damagedDashLenght;
+    public float DamagedDashLenght => _damagedDashLenght;
+    [SerializeField, MinValue(0)] float _damagedDashDuration;
+    public float DamagedDashDuration => _damagedDashDuration;
+    float _currentDashLenght;
+    float _currentDashDuration;
+
     [Space]
     [SerializeField] Color _colorWhenDash;
     float _dashTimer = 0f;
@@ -85,6 +103,9 @@ public class PlayerMovement : MonoBehaviour
         _sr = GetComponent<SpriteRenderer>();
 
         _normalColor = _sr.color;
+        _currentMovementSpeed = _movementSpeed;
+        _currentDashLenght = _dashLenght;
+        _currentDashDuration = _dashDuration;
     }
 
     private void Update()
@@ -132,12 +153,19 @@ public class PlayerMovement : MonoBehaviour
             _isMoving = true;
 
             if(_smoothChangeDirection) // Smooth change direction when moving if it's activated
-                _rb.MovePosition((Vector2)transform.position + ((Vector2)_currentRotator.up * _movementSpeed * Time.deltaTime * (_normalizeMovement ? _inputsManager.MoveInput.magnitude : 1)));
+                _rb.MovePosition((Vector2)transform.position + ((Vector2)_currentRotator.up * _currentMovementSpeed * Time.deltaTime * (_normalizeMovement ? _inputsManager.MoveInput.magnitude : 1)));
             else
-                _rb.MovePosition((Vector2)transform.position + (_inputsManager.MoveInput * _movementSpeed * Time.deltaTime * (_normalizeMovement ? _inputsManager.MoveInput.magnitude : 1)));
+                _rb.MovePosition((Vector2)transform.position + (_inputsManager.MoveInput * _currentMovementSpeed * Time.deltaTime * (_normalizeMovement ? _inputsManager.MoveInput.magnitude : 1)));
         }
         else
             _isMoving = false;
+    }
+
+    public void SetDamagedPercent(float percent)
+    {
+        _currentMovementSpeed = Mathf.Lerp(_damagedMovementSpeed, _movementSpeed, _damagedMovementSpeedRecuperationCurve.Evaluate(percent));
+        _currentDashLenght = percent < 1 ? _damagedDashLenght : _dashLenght;
+        _currentDashDuration = percent < 1 ? _damagedDashDuration : _dashDuration;
     }
 
     // ----- Dash ----- //
@@ -158,7 +186,7 @@ public class PlayerMovement : MonoBehaviour
     void StartDash()
     {
         _startDashPos = transform.position;
-        _endDashPos = _startDashPos + (_inputsManager.MoveInput * _dashLenght); // Calculate end dash position
+        _endDashPos = _startDashPos + (_inputsManager.MoveInput * _currentDashLenght); // Calculate end dash position
         _isDashing = true;
         _canDash = false;
     }
@@ -167,16 +195,16 @@ public class PlayerMovement : MonoBehaviour
     void Dash()
     {
         // Lerp velocity to dash speed if timer is not finished
-        if(_dashTimer < _dashDuration)
+        if(_dashTimer < _currentDashDuration)
         {
             // Smooth change end dash position if it's activated
             if (_canChangeDirectionDuringDash)
             {
-                _endDashPos = _startDashPos + ((Vector2)_currentRotator.up * _dashLenght);
+                _endDashPos = _startDashPos + ((Vector2)_currentRotator.up * _currentDashLenght);
             }
 
             // Calculate and set position of player
-            Vector2 currentDashPosition = Vector2.Lerp(_startDashPos, _endDashPos, _dashCurve.Evaluate(_dashTimer / _dashDuration));
+            Vector2 currentDashPosition = Vector2.Lerp(_startDashPos, _endDashPos, _dashCurve.Evaluate(_dashTimer / _currentDashDuration));
             _rb.MovePosition(currentDashPosition);
 
             _dashTimer += Time.fixedDeltaTime;
@@ -199,28 +227,6 @@ public class PlayerMovement : MonoBehaviour
     void ResetCanDash()
     {
         _canDash = true;
-    }
-
-    // ----- Trap check ----- //
-
-    /// <summary>
-    /// Checks if there is less than a certain number of ground trap around player
-    /// </summary>
-    /// <param name="count">The max count of ground traps around player</param>
-    public bool CanSpawnGroundTrapAround(int maxCount, float radius)
-    {
-        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, radius);
-        int groundTrapCount = 0;
-        if(cols.Length > 0)
-        {
-            foreach(Collider2D col in cols)
-            {
-                if (col.tag == "GroundTrap")
-                    groundTrapCount++;
-            }
-        }
-
-        return groundTrapCount < maxCount;
     }
 
     // ----- Color ----- //

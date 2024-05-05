@@ -80,7 +80,8 @@ public class DifficultyManager : MonoBehaviour
 public class DifficultyParams
 {
     [MinValue(0), Suffix("Seconds")] public float WaveDuration;
-    public Trap[] Traps;
+    [MinValue(0)] public float ArenaSize;
+    public Trap[] Traps; 
     [Space]
     public AnimationCurve TrapSpawnRateCurve;
     [MinValue(0), Suffix("Per second")] public float TrapSpawnRateMin;

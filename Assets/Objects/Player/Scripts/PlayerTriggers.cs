@@ -4,37 +4,38 @@ using UltimateAttributesPack;
 
 public class PlayerTriggers : MonoBehaviour
 {
+    GameManager _gameManager;
     PlayerController _playerController;
-    [SerializeField] UIManager _uiManager;
 
     [Title("Death", "dark red")]
     [SerializeField, Tag] string _deathZoneTag;
     [SerializeField] float _invincibleTime;
-    [SerializeField] float _riskDeathTime;
+    [SerializeField] float _damagedTime;
 
     List<Collider2D> _overlapedTraps = new List<Collider2D>();
     float _invincibleTimer;
     bool _isInvincible;
-    float _riskDeathTimer;
-    bool _isRiskingDeath;
+    float _damagedTimer;
     bool _isDead;
+    bool _isDamaged;
+
+    [Title("Slabs")]
+    [SerializeField, Tag] string _slabTag;
 
     private void Awake()
     {
+        // Get game manager
+        _gameManager = FindObjectOfType<GameManager>();
+
         _playerController = GetComponent<PlayerController>();
     }
 
     private void Update()
     {
-        if(_isInvincible)
-            InvincibleCooldown();
+        if (_isDamaged)
+            DamagedCooldown();
         else
-        {
-            if(_isRiskingDeath)
-                RiskingDeathCooldown();
-            
-            DetectIfDamage();
-        }        
+            DetectIfDamage();     
     }
 
     void DetectIfDamage()
@@ -42,43 +43,53 @@ public class PlayerTriggers : MonoBehaviour
         if (!_playerController.PlayerMovement.IsDashing && _overlapedTraps.Count > 0)
         {
             // If we are risking death, the die
-            if (_isRiskingDeath)
+            if (_isDamaged)
                 Death();
             else // If we are not risking death, then become invincible and activate risking death
             {
+                _gameManager.UIManager.SetRinskingDeathImage(0f);
+                _playerController.PlayerMovement.SetDamagedPercent(_playerController.PlayerMovement.DamagedMovementSpeed);
                 _invincibleTimer = 0f;
-                _uiManager.SetRinskingDeathImage(0f);
                 _isInvincible = true;
+                _damagedTimer = 0f;
+                _isDamaged = true;
             }
         }
     }
 
-    void InvincibleCooldown()
+    void DamagedCooldown()
     {
-        if(_invincibleTimer < _invincibleTime)
-        {            
-            _invincibleTimer += Time.deltaTime;
+        if (_isInvincible)
+        {
+            if(_invincibleTimer < _invincibleTime)
+            {
+                _invincibleTimer += Time.deltaTime;
+            }
+            else
+            {             
+                _isInvincible = false;               
+            }
         }
         else
         {
-            _isInvincible = false;
-            _isRiskingDeath = true;
-            _riskDeathTimer = 0f;
             DetectIfDamage();
-        }
-    }
 
-    void RiskingDeathCooldown()
-    {
-        if (_riskDeathTimer < _riskDeathTime)
-        {
-            _uiManager.SetRinskingDeathImage(_riskDeathTimer / _riskDeathTime); // Refresh risking death image color and opacity
-            _riskDeathTimer += Time.deltaTime;
-        }
-        else
-        {
-            _uiManager.SetRinskingDeathImage(1f); // Set risking death image color and opacity to 0
-            _isRiskingDeath = false;
+            if (_damagedTimer < _damagedTime)
+            {
+                // Set new player movement and dash from damaged speed to normal
+                _playerController.PlayerMovement.SetDamagedPercent(_damagedTimer / _damagedTime);               
+
+                // Refresh risking death image color and opacity
+                _gameManager.UIManager.SetRinskingDeathImage(_damagedTimer / _damagedTime);
+
+                _damagedTimer += Time.deltaTime;
+            }
+            else
+            {
+                _playerController.PlayerMovement.SetDamagedPercent(1f); // Set new player movement and dash to normal
+                _gameManager.UIManager.SetRinskingDeathImage(1f); // Set risking death image color and opacity to 0
+                _isDamaged = false;
+            }
         }
     }
 
@@ -86,23 +97,34 @@ public class PlayerTriggers : MonoBehaviour
     {
         if (!_isDead)
         {
-            _uiManager.SetDeathMenu(true);
+            _gameManager.UIManager.SetDeathMenu(true);
             _isDead = true;
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        // Walk on death zone
         if(collision.tag == _deathZoneTag)
         {
             if(!_overlapedTraps.Contains(collision))
                 _overlapedTraps.Add(collision);
         }
+
+        // Walk on activated slab
+        if(collision.tag == _slabTag)
+        {
+            if(collision.gameObject.TryGetComponent<SlabScript>(out SlabScript slab))
+            {
+                _gameManager.ArenaManager.WalkOnSlab(slab);
+            }
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if(collision.tag == _deathZoneTag)
+        // Leave death zone
+        if (collision.tag == _deathZoneTag)
         {
             if(_overlapedTraps.Contains(collision))
                 _overlapedTraps.Remove(collision);

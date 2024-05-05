@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UltimateAttributesPack;
 
-public class VerticalLaser : MonoBehaviour
+public class VerticalLaserScript : MonoBehaviour
 {
     GameManager _gameManager;
     VerticalLaserParams _trapParams;

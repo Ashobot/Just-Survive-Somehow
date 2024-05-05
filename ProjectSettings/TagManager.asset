@@ -6,6 +6,7 @@ TagManager:
   tags:
   - GroundTrap
   - DeathZone
+  - Slab
   layers:
   - Default
   - TransparentFX
