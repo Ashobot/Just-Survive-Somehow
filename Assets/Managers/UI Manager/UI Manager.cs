@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UltimateAttributesPack;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
@@ -26,12 +27,21 @@ public class UIManager : MonoBehaviour
     [SerializeField] Color _riskingDeathMinColor;
     [SerializeField] Color _riskingDeathMaxColor;
 
+    [LineTitle("Dialogues")]
+    [SerializeField] GameObject _dialogueObject;
+    [SerializeField] TextMeshProUGUI _dialogueText;
+    public TextMeshProUGUI DialogueText => _dialogueText;
+
+    // ----- General Functions ----- //
+
     void SetFirstSelectedObject(GameObject go)
     {
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(go);
         EventSystem.current.firstSelectedGameObject = go;
     }
+
+    // ----- Pause menu ----- //
 
     public void SetPauseMenu(bool state)
     {
@@ -45,6 +55,8 @@ public class UIManager : MonoBehaviour
         _inPauseMenu = state;
     }
 
+    // ----- Death ----- //
+
     public void SetDeathMenu(bool state)
     {
         _deathMenuObj.SetActive(state);
@@ -57,4 +69,24 @@ public class UIManager : MonoBehaviour
     {
         _riskingDeathImage.color = Color.Lerp(_riskingDeathMaxColor, _riskingDeathMinColor, _rinskingDeathCurve.Evaluate(percent)); // Lerp and set color
     }
+
+    // ----- Dialogues ----- //
+
+    public void SetDialogueState(bool state)
+    {
+        _dialogueObject.gameObject.SetActive(state);
+    }
+
+    public void ClearDialogueText()
+    {
+        _dialogueText.text = "";
+    }
+
+    public void AddDialogueChar(char character)
+    {
+        _dialogueText.text += character;
+    }
+
+
+
 }

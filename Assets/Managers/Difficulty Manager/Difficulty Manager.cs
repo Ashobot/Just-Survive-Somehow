@@ -6,8 +6,6 @@ public class DifficultyManager : MonoBehaviour
 {
     GameManager _gameManager;
 
-    [SerializeField, ReadOnly] int _currentDifficultyLevel;
-
     [HelpBox("All the difficulty parameters for each wave")]
     [SerializeField] DifficultyParams[] _difficultyParams;
     DifficultyParams _currentDifficultyParams;
@@ -19,7 +17,7 @@ public class DifficultyManager : MonoBehaviour
     private void Awake()
     {
         // Get game manager
-        _gameManager = transform.root.GetComponent<GameManager>();
+        _gameManager = FindObjectOfType<GameManager>();
     }
 
     private void Start()
@@ -29,20 +27,24 @@ public class DifficultyManager : MonoBehaviour
 
     private void Update()
     {
-        RefreshTrapSpawnRate();
-        ManageTrapSpawn();
+        if (!_gameManager.GameLoopManager.WaveFinished)
+        {
+            RefreshTrapSpawnRate();
+            ManageTrapSpawn();
+        }
     }
 
     /// <summary>
     ///  Increase the difficulty level to the next level
     /// </summary>
-    public void IncreaseDifficultyLevel()
-    {        
-        _currentDifficultyLevel = Mathf.Clamp(_currentDifficultyLevel++, 0, _difficultyParams.Length - 1);
-        _currentDifficultyParams = _difficultyParams[_currentDifficultyLevel]; // Change difficulty params
+    public void SetNextWave()
+    {
+        int newWaveIndex = Mathf.Clamp(_gameManager.GameLoopManager.CurrentWaveIndex + 1, 0, _difficultyParams.Length - 1);
+        _gameManager.GameLoopManager.SetWave(newWaveIndex);
+        _currentDifficultyParams = _difficultyParams[newWaveIndex]; // Change difficulty params
         _currentTrapSpawnRate = _currentDifficultyParams.TrapSpawnRateMin; // Set trap spawn rate to min of wave
         _gameManager.GameLoopManager.ResetWaveTimer(); // Set wave timer to 0
-        _gameManager.TrapsManager.SetTrapsParamsLevel(_currentDifficultyLevel); // Set all traps params to the new difficulty level
+        _gameManager.TrapsManager.SetTrapsParamsLevel(newWaveIndex); // Set all traps params to the new difficulty level
     }
 
     /// <summary>

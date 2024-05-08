@@ -197,7 +197,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             ""id"": ""4e1ee175-f6b6-4677-bc25-41bb883ad6ff"",
             ""actions"": [
                 {
-                    ""name"": ""MenuPause"",
+                    ""name"": ""Pause"",
                     ""type"": ""Button"",
                     ""id"": ""a84dea88-59e5-4f5a-b695-bf55e602b32a"",
                     ""expectedControlType"": ""Button"",
@@ -214,7 +214,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""MenuPause"",
+                    ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -225,7 +225,46 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
-                    ""action"": ""MenuPause"",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Dialogues"",
+            ""id"": ""80cb0ce7-5429-4536-bef8-15fd2f1737ba"",
+            ""actions"": [
+                {
+                    ""name"": ""NextLine"",
+                    ""type"": ""Button"",
+                    ""id"": ""00921f7e-e63f-4d0b-a7f0-dc77c916c8f5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""71a263e9-7806-4cca-a6c3-1d846252989a"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""NextLine"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f4e7f868-8e31-48d6-b469-a9ccc294f1ce"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""NextLine"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -263,7 +302,10 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Movements_Dash = m_Movements.FindAction("Dash", throwIfNotFound: true);
         // Menus
         m_Menus = asset.FindActionMap("Menus", throwIfNotFound: true);
-        m_Menus_MenuPause = m_Menus.FindAction("MenuPause", throwIfNotFound: true);
+        m_Menus_Pause = m_Menus.FindAction("Pause", throwIfNotFound: true);
+        // Dialogues
+        m_Dialogues = asset.FindActionMap("Dialogues", throwIfNotFound: true);
+        m_Dialogues_NextLine = m_Dialogues.FindAction("NextLine", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -379,12 +421,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     // Menus
     private readonly InputActionMap m_Menus;
     private List<IMenusActions> m_MenusActionsCallbackInterfaces = new List<IMenusActions>();
-    private readonly InputAction m_Menus_MenuPause;
+    private readonly InputAction m_Menus_Pause;
     public struct MenusActions
     {
         private @PlayerControls m_Wrapper;
         public MenusActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @MenuPause => m_Wrapper.m_Menus_MenuPause;
+        public InputAction @Pause => m_Wrapper.m_Menus_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Menus; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -394,16 +436,16 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_MenusActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_MenusActionsCallbackInterfaces.Add(instance);
-            @MenuPause.started += instance.OnMenuPause;
-            @MenuPause.performed += instance.OnMenuPause;
-            @MenuPause.canceled += instance.OnMenuPause;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
         }
 
         private void UnregisterCallbacks(IMenusActions instance)
         {
-            @MenuPause.started -= instance.OnMenuPause;
-            @MenuPause.performed -= instance.OnMenuPause;
-            @MenuPause.canceled -= instance.OnMenuPause;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
         }
 
         public void RemoveCallbacks(IMenusActions instance)
@@ -421,6 +463,52 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         }
     }
     public MenusActions @Menus => new MenusActions(this);
+
+    // Dialogues
+    private readonly InputActionMap m_Dialogues;
+    private List<IDialoguesActions> m_DialoguesActionsCallbackInterfaces = new List<IDialoguesActions>();
+    private readonly InputAction m_Dialogues_NextLine;
+    public struct DialoguesActions
+    {
+        private @PlayerControls m_Wrapper;
+        public DialoguesActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @NextLine => m_Wrapper.m_Dialogues_NextLine;
+        public InputActionMap Get() { return m_Wrapper.m_Dialogues; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(DialoguesActions set) { return set.Get(); }
+        public void AddCallbacks(IDialoguesActions instance)
+        {
+            if (instance == null || m_Wrapper.m_DialoguesActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_DialoguesActionsCallbackInterfaces.Add(instance);
+            @NextLine.started += instance.OnNextLine;
+            @NextLine.performed += instance.OnNextLine;
+            @NextLine.canceled += instance.OnNextLine;
+        }
+
+        private void UnregisterCallbacks(IDialoguesActions instance)
+        {
+            @NextLine.started -= instance.OnNextLine;
+            @NextLine.performed -= instance.OnNextLine;
+            @NextLine.canceled -= instance.OnNextLine;
+        }
+
+        public void RemoveCallbacks(IDialoguesActions instance)
+        {
+            if (m_Wrapper.m_DialoguesActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IDialoguesActions instance)
+        {
+            foreach (var item in m_Wrapper.m_DialoguesActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_DialoguesActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public DialoguesActions @Dialogues => new DialoguesActions(this);
     private int m_GamepadSchemeIndex = -1;
     public InputControlScheme GamepadScheme
     {
@@ -446,6 +534,10 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     }
     public interface IMenusActions
     {
-        void OnMenuPause(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
+    }
+    public interface IDialoguesActions
+    {
+        void OnNextLine(InputAction.CallbackContext context);
     }
 }

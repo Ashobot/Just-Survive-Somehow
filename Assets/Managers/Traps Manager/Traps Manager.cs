@@ -8,6 +8,7 @@ public class TrapsManager : MonoBehaviour
     GameManager _gameManager;
 
     [SerializeField] Transform _trapsParentObject;
+    public Transform TrapsParentObject => _trapsParentObject;
 
     [Title("Traps categories")]
     [SerializeField] WaveTrapTypes[] _waveTrapCategories;
@@ -34,7 +35,7 @@ public class TrapsManager : MonoBehaviour
     private void Awake()
     {
         // Get game manager
-        _gameManager = transform.root.GetComponent<GameManager>();
+        _gameManager = FindObjectOfType<GameManager>();
     }
 
     private void Start()
@@ -63,7 +64,7 @@ public class TrapsManager : MonoBehaviour
     List<Trap> GetSpawnableTrapsList(DifficultyParams difficultyParams)
     {
         List<Trap> spawnableTraps = new List<Trap>();
-        int[] trapsPerCategories = new int[_waveTrapCategories[_gameManager.GameLoopManager.CurrentWave].TrapCategories.Length];
+        int[] trapsPerCategories = new int[_waveTrapCategories[_gameManager.GameLoopManager.CurrentWaveIndex].TrapCategories.Length];
              
         // Foreach traps in traps parent
         foreach (TrapTypeScript trap in _trapsParentObject.GetComponentsInChildren<TrapTypeScript>())
@@ -72,7 +73,7 @@ public class TrapsManager : MonoBehaviour
             for(int i = 0; i < trapsPerCategories.Length; i++)
             {
                 // If current trap is of the current trap category type
-                if (trap.TrapType == _waveTrapCategories[_gameManager.GameLoopManager.CurrentWave].TrapCategories[i].TrapType)
+                if (trap.TrapType == _waveTrapCategories[_gameManager.GameLoopManager.CurrentWaveIndex].TrapCategories[i].TrapType)
                 {
                     trapsPerCategories[i]++; // Increment count of the current index of traps per category array
                     break;
@@ -87,10 +88,10 @@ public class TrapsManager : MonoBehaviour
             for(int i = 0; i < trapsPerCategories.Length; i++)
             {
                 // If the type of the trap is the same as trap categoty
-                if(trap.Type == _waveTrapCategories[_gameManager.GameLoopManager.CurrentWave].TrapCategories[i].TrapType)
+                if(trap.Type == _waveTrapCategories[_gameManager.GameLoopManager.CurrentWaveIndex].TrapCategories[i].TrapType)
                 {
                     // If there is less trap of this type than max count of this type in the map
-                    if(trapsPerCategories[i] < _waveTrapCategories[_gameManager.GameLoopManager.CurrentWave].TrapCategories[i].MaxCountInMap)
+                    if(trapsPerCategories[i] < _waveTrapCategories[_gameManager.GameLoopManager.CurrentWaveIndex].TrapCategories[i].MaxCountInMap)
                     {
                         spawnableTraps.Add(trap); // Add the trap in the spawnable trap list
                         break;
@@ -112,6 +113,10 @@ public class TrapsManager : MonoBehaviour
         float maxChance = 0;
         foreach(Trap trap in spawnableTraps)
             maxChance += trap.percentChance;
+
+        // Chech if total chance is less than 100, else log warning
+        if (maxChance > 100)
+            Debug.LogWarning($"Traps spawn total percent chance is more than 100 in wave {_gameManager.GameLoopManager.CurrentWaveIndex}");
 
         float rand = UnityEngine.Random.Range(0, maxChance);
         float chancesSum = 0;

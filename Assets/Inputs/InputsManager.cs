@@ -10,8 +10,8 @@ public class InputsManager : MonoBehaviour
     // ----- Variables ----- //
 
     // Components
+    GameManager _gameManager;
     PlayerControls _playerControls;
-    [SerializeField] UIManager _uiManager;
 
     // Movement inputs
 
@@ -36,7 +36,10 @@ public class InputsManager : MonoBehaviour
         _playerControls.Movements.Dash.canceled += OnEndDash;
 
         // Enable menu pause input
-        _playerControls.Menus.MenuPause.started += OnMenuPause;
+        _playerControls.Menus.Pause.started += OnPause;
+
+        // Enable dialogues input
+        _playerControls.Dialogues.NextLine.started += OnNextLine;
     }
 
     private void OnDisable()
@@ -54,11 +57,17 @@ public class InputsManager : MonoBehaviour
         _playerControls.Movements.Dash.canceled -= OnEndDash;
 
         // Disable menu pause input
-        _playerControls.Menus.MenuPause.started -= OnMenuPause;
+        _playerControls.Menus.Pause.started -= OnPause;
+
+        // Disable dialogues input
+        _playerControls.Dialogues.NextLine.started -= OnNextLine;
     }
 
     private void Awake()
     {
+        // Get game manager
+        _gameManager = FindObjectOfType<GameManager>();
+
         _playerControls = new PlayerControls();
     }
 
@@ -96,15 +105,24 @@ public class InputsManager : MonoBehaviour
 
     }
 
-    // ----- Menu pause input ----- //
-
-    void OnMenuPause(InputAction.CallbackContext ctx)
-    {
-        _uiManager.SetPauseMenu(!_uiManager.InPauseMenu);
-    }
-
     public void DisableDashInput()
     {
         _dashInput = false;
     }
+
+    // ----- Menu pause input ----- //
+
+    void OnPause(InputAction.CallbackContext ctx)
+    {
+        _gameManager.UIManager.SetPauseMenu(!_gameManager.UIManager.InPauseMenu);
+    }
+
+    // ----- Dialogues input ----- //
+
+    void OnNextLine(InputAction.CallbackContext ctx)
+    {
+        Debug.Log("next line");
+        _gameManager.DialogueManager.NextLine();
+    }
+
 }

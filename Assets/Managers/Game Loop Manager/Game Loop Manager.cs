@@ -6,12 +6,17 @@ public class GameLoopManager : MonoBehaviour
 {
     GameManager _gameManager;
 
-    [SerializeField, ReadOnly] int _currentWave;
-    public int CurrentWave { get { return _currentWave; } }
+    [SerializeField, ReadOnly] int _currentWaveIndex;
+    public int CurrentWaveIndex => _currentWaveIndex;
     [SerializeField, ProgressBar("", 0, 1, true)] float _currentWavePercent;
     public float CurrentWavePercent { get { return _currentWavePercent; } }
 
     [SerializeField, ReadOnly] float _waveTimer;
+
+    bool _waveFinished;
+    public bool WaveFinished => _waveFinished;
+
+    bool _endWaveDialogueStarted;
 
     [LineTitle("Scenes Manager")]
     [SerializeField, Scene] int _gameSceneIndex;
@@ -21,7 +26,12 @@ public class GameLoopManager : MonoBehaviour
         Time.timeScale = 1;
 
         // Get game manager
-        _gameManager = transform.root.GetComponent<GameManager>();
+        _gameManager = FindObjectOfType<GameManager>();
+    }
+
+    public void SetWave(int index)
+    {
+        _currentWaveIndex = index;
     }
 
     public void ResetWaveTimer()
@@ -31,7 +41,10 @@ public class GameLoopManager : MonoBehaviour
 
     private void Update()
     {
-        ManageWave();
+        if(!_waveFinished)
+            ManageWave();
+        else
+            ManageEndWave();
     }
 
     void ManageWave()
@@ -45,6 +58,30 @@ public class GameLoopManager : MonoBehaviour
         // If the current wave is at maximum difficulty (reach timer end)
         else
             _currentWavePercent = 1f;
+    }
+
+    void ManageEndWave()
+    {
+        if (!_endWaveDialogueStarted)
+        {
+            int trapsInMap = _gameManager.TrapsManager.TrapsParentObject.transform.childCount;
+
+            if(trapsInMap == 0)
+            {
+                _gameManager.DialogueManager.StartRandomEndWaveDialogue(_currentWaveIndex);
+                SetEndWaveDialogueStarted(true);
+            }
+        }
+    }
+
+    public void SetWaveFinished(bool state)
+    {
+        _waveFinished = state;
+    }
+
+    public void SetEndWaveDialogueStarted(bool state)
+    {
+        _endWaveDialogueStarted = state;
     }
 
     public void ReloadGame()

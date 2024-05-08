@@ -175,7 +175,7 @@
             "id": "4e1ee175-f6b6-4677-bc25-41bb883ad6ff",
             "actions": [
                 {
-                    "name": "MenuPause",
+                    "name": "Pause",
                     "type": "Button",
                     "id": "a84dea88-59e5-4f5a-b695-bf55e602b32a",
                     "expectedControlType": "Button",
@@ -192,7 +192,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "MenuPause",
+                    "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -203,7 +203,46 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "MenuPause",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Dialogues",
+            "id": "80cb0ce7-5429-4536-bef8-15fd2f1737ba",
+            "actions": [
+                {
+                    "name": "NextLine",
+                    "type": "Button",
+                    "id": "00921f7e-e63f-4d0b-a7f0-dc77c916c8f5",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "71a263e9-7806-4cca-a6c3-1d846252989a",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "NextLine",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f4e7f868-8e31-48d6-b469-a9ccc294f1ce",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "NextLine",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

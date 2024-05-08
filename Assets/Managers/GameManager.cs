@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] InputsManager _inputsManager;
+    public InputsManager InputsManager => _inputsManager;
+
     [SerializeField] GameLoopManager _gameLoopManager;
     public GameLoopManager GameLoopManager => _gameLoopManager;
 
@@ -10,6 +13,9 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] TrapsManager _trapsManager;
     public TrapsManager TrapsManager => _trapsManager;
+
+    [SerializeField] DialogueManager _dialogueManager;
+    public DialogueManager DialogueManager => _dialogueManager;
 
     [SerializeField] ArenaManager _arenaManager;
     public ArenaManager ArenaManager => _arenaManager;

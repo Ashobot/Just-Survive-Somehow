@@ -104,20 +104,17 @@ public class ArenaManager : MonoBehaviour
         if (_activatedSlabs.Contains(slab))
         {
             _activatedSlabs.Remove(slab);
-            slab.SetActivated(false, _slabsPatterns[_gameManager.GameLoopManager.CurrentWave].NormalColor);
+            slab.SetActivated(false, _slabsPatterns[_gameManager.GameLoopManager.CurrentWaveIndex].NormalColor);
         }
 
         // If there is no other slabs activated, go to next wave
         if (_activatedSlabs.Count == 0)
-            NextWave();
+            WaveFinished();
     }
 
-    void NextWave()
+    void WaveFinished()
     {
-        Debug.Log("next wave");
-
-
-
+        _gameManager.GameLoopManager.SetWaveFinished(true);
     }
 
 }
