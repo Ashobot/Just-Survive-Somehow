@@ -121,7 +121,6 @@ public class InputsManager : MonoBehaviour
 
     void OnNextLine(InputAction.CallbackContext ctx)
     {
-        Debug.Log("next line");
         _gameManager.DialogueManager.NextLine();
     }
 

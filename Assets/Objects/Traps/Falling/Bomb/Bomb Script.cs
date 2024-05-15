@@ -1,36 +1,32 @@
-using UnityEngine;
 using System;
+using UnityEngine;
 using UltimateAttributesPack;
 
-public class BearTrapScript : MonoBehaviour
+public class BombScript : MonoBehaviour
 {
     GameManager _gameManager;
-    BearTrapParams _trapParams;
+    BombParams _trapParams;
     CircleCollider2D _collider;
 
     [SerializeField] GameObject _shadowObject;
-    [SerializeField] GameObject _trapObject;
+    [SerializeField] GameObject _bombObject;
+    [SerializeField] GameObject _deathZonePreview;
     [SerializeField] GameObject _deathZone;
 
     Vector2 _startPosition;
     bool _atGround;
-    bool _deployed;
+    bool _exploded;
     float _fallTimer;
-    float _deployTimer;
-    float _destroyTimer;
-    float _currentSpawnYOffset;
-    float _currentSpawnRadius;
+    float _explodeTimer;
+    float _explosionTimer;
     float _currentFallDuration;
-    float _currentDeployDuration;
-    float _currentDestroyDuration;
+    float _currentExplodeDuration;
+    float _currentExplosionDuration;
 
     private void Awake()
     {
         // Get Game Manager
-        if (GameObject.Find("Game Manager").TryGetComponent<GameManager>(out GameManager gm))
-            _gameManager = gm;
-        else
-            Debug.LogWarning("Game Manager not found");
+        _gameManager = FindObjectOfType<GameManager>();
 
         _collider = GetComponent<CircleCollider2D>();
     }
@@ -47,13 +43,13 @@ public class BearTrapScript : MonoBehaviour
         // Is falling
         if (!_atGround)
         {
-            if(_fallTimer < _currentFallDuration)
+            if (_fallTimer < _currentFallDuration)
             {
                 // Lerp position drom up to down
-                _trapObject.transform.position = Vector2.Lerp(_startPosition, _shadowObject.transform.position, _trapParams.FallCurve.Evaluate(_fallTimer / _currentFallDuration));
+                _bombObject.transform.position = Vector2.Lerp(_startPosition, _shadowObject.transform.position, _trapParams.FallCurve.Evaluate(_fallTimer / _currentFallDuration));
 
                 // Lerp scale of trap
-                _trapObject.transform.localScale = Vector2.Lerp(Vector2.zero, transform.localScale, _trapParams.FallCurve.Evaluate(_fallTimer / _currentFallDuration));
+                _bombObject.transform.localScale = Vector2.Lerp(Vector2.zero, transform.localScale, _trapParams.FallCurve.Evaluate(_fallTimer / _currentFallDuration));
 
                 // Lerp scale of shadow
                 _shadowObject.transform.localScale = Vector2.Lerp(Vector2.zero, transform.localScale, _trapParams.FallCurve.Evaluate(_fallTimer / _currentFallDuration));
@@ -62,30 +58,36 @@ public class BearTrapScript : MonoBehaviour
             }
             else
             {
-                _trapObject.transform.position = _shadowObject.transform.position;
-                DeactivateShadow();
+                _bombObject.transform.position = _shadowObject.transform.position;
+                _shadowObject.SetActive(false);
+                _deathZonePreview.SetActive(true);
                 _collider.isTrigger = false;
                 _atGround = true;
             }
         }
-        // Is deploying
-        else if(_atGround && !_deployed)
+        // Bomb explosion timer
+        else if (_atGround && !_exploded)
         {
-            if (_deployTimer < _currentDeployDuration)
-                _deployTimer += Time.deltaTime;
+            if (_explodeTimer < _currentExplodeDuration)
+                _explodeTimer += Time.deltaTime;
             else
             {
+                //Explosion animation
+
                 _deathZone.SetActive(true);
-                _deployed = true;
+                _deathZonePreview.GetComponent<SpriteRenderer>().color = Color.red;
+                _exploded = true;
             }
         }
-        // Trap armed
+        // Bomb explosion
         else
         {
-            if (_destroyTimer < _currentDestroyDuration)
-                _destroyTimer += Time.deltaTime;
+            if (_explosionTimer < _currentExplosionDuration)
+                _explosionTimer += Time.deltaTime;
             else
+            {
                 DestroyTrap();
+            }
         }
     }
 
@@ -93,10 +95,12 @@ public class BearTrapScript : MonoBehaviour
     {
         float currentWavePercent = _gameManager.GameLoopManager.CurrentWavePercent;
 
-        _trapParams = _gameManager.TrapsManager.CurrentBearTrapsParams;
+        _trapParams = _gameManager.TrapsManager.CurrentBombParams;
+        _deathZone.transform.localScale = new Vector2(_trapParams.ExplosionRange, _trapParams.ExplosionRange);
+        _deathZonePreview.transform.localScale = new Vector2(_trapParams.ExplosionRange, _trapParams.ExplosionRange);
         _currentFallDuration = Mathf.Lerp(_trapParams.FallDurationStart, _trapParams.FallDurationEnd, currentWavePercent);
-        _currentDeployDuration = Mathf.Lerp(_trapParams.DeployDurationStart, _trapParams.DeployDurationEnd, currentWavePercent);
-        _currentDestroyDuration = Mathf.Lerp(_trapParams.DestroyDurationStart, _trapParams.DestroyDurationEnd, currentWavePercent);
+        _currentExplodeDuration = Mathf.Lerp(_trapParams.ExplodeDurationStart, _trapParams.ExplodeDurationEnd, currentWavePercent);
+        _currentExplosionDuration = Mathf.Lerp(_trapParams.ExplosionDurationStart, _trapParams.ExplosionDurationEnd, currentWavePercent);
     }
 
     void SetPositions()
@@ -115,21 +119,16 @@ public class BearTrapScript : MonoBehaviour
 
         // Set trap position to up offset
         _startPosition = new Vector3(randomSpawnPosition.x, randomSpawnPosition.y + _trapParams.SpawnYOffset);
-        _trapObject.transform.position = _startPosition;
+        _bombObject.transform.position = _startPosition;
 
         // Set trap rotation to random
-        _trapObject.transform.eulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(0f, 360f));
+        _bombObject.transform.eulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(0f, 360f));
     }
 
     void ActivateObject()
     {
         _shadowObject.SetActive(true);
-        _trapObject.SetActive(true);
-    }
-
-    void DeactivateShadow()
-    {
-        _shadowObject.SetActive(false);
+        _bombObject.SetActive(true);
     }
 
     void DestroyTrap()
@@ -141,18 +140,19 @@ public class BearTrapScript : MonoBehaviour
 // ----- Serializable classes ----- //
 
 [Serializable]
-public class BearTrapParams
+public class BombParams
 {
     [MinValue(0)] public float SpawnYOffset;
     [MinValue(0)] public float SpawnRadius;
+    [MinValue(0)] public float ExplosionRange;
     public AnimationCurve FallCurve;
     [Space]
     [MinValue(0)] public float FallDurationStart;
     [MinValue(0)] public float FallDurationEnd;
     [Space]
-    [MinValue(0)] public float DeployDurationStart;
-    [MinValue(0)] public float DeployDurationEnd;
+    [MinValue(0)] public float ExplodeDurationStart;
+    [MinValue(0)] public float ExplodeDurationEnd;
     [Space]
-    [MinValue(0)] public float DestroyDurationStart;
-    [MinValue(0)] public float DestroyDurationEnd;
+    [MinValue(0)] public float ExplosionDurationStart;
+    [MinValue(0)] public float ExplosionDurationEnd;
 }

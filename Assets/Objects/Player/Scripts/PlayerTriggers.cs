@@ -38,22 +38,30 @@ public class PlayerTriggers : MonoBehaviour
             DetectIfDamage();     
     }
 
+    public void RemoveOverlappedTrap(Collider2D col)
+    {
+        _overlapedTraps.Remove(col);
+    }
+
     void DetectIfDamage()
     {
         if (!_playerController.PlayerMovement.IsDashing && _overlapedTraps.Count > 0)
+            SetDamage();
+    }
+
+    public void SetDamage()
+    {
+        // If we are risking death, the die
+        if (_isDamaged)
+            Death();
+        else // If we are not risking death, then become invincible and activate risking death
         {
-            // If we are risking death, the die
-            if (_isDamaged)
-                Death();
-            else // If we are not risking death, then become invincible and activate risking death
-            {
-                _gameManager.UIManager.SetRinskingDeathImage(0f);
-                _playerController.PlayerMovement.SetDamagedPercent(_playerController.PlayerMovement.DamagedMovementSpeed);
-                _invincibleTimer = 0f;
-                _isInvincible = true;
-                _damagedTimer = 0f;
-                _isDamaged = true;
-            }
+            _gameManager.UIManager.SetRinskingDeathImage(0f);
+            _playerController.PlayerMovement.SetDamagedPercent(_playerController.PlayerMovement.DamagedMovementSpeed);
+            _invincibleTimer = 0f;
+            _isInvincible = true;
+            _damagedTimer = 0f;
+            _isDamaged = true;
         }
     }
 
@@ -126,8 +134,10 @@ public class PlayerTriggers : MonoBehaviour
         // Leave death zone
         if (collision.tag == _deathZoneTag)
         {
-            if(_overlapedTraps.Contains(collision))
+            if (_overlapedTraps.Contains(collision))
+            {
                 _overlapedTraps.Remove(collision);
+            }
         }
     }
 }

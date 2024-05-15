@@ -13,24 +13,35 @@ public class TrapsManager : MonoBehaviour
     [Title("Traps categories")]
     [SerializeField] WaveTrapTypes[] _waveTrapCategories;
 
-    [Title("Falling traps", "white", "orange")]
+    [Title("Falling", "white", "orange")]
 
     [LineTitle("Bear trap")]
     [SerializeField] BearTrapParams[] _bearTrapsParams;
     BearTrapParams _currentBearTrapsParams;
-    public BearTrapParams CurrentBearTrapsParams { get { return _currentBearTrapsParams; } }
+    public BearTrapParams CurrentBearTrapsParams => _currentBearTrapsParams;
+
+    [LineTitle("Bomb")]
+    [SerializeField] BombParams[] _bombsParams;
+    BombParams _currentBombParams;
+    public BombParams CurrentBombParams => _currentBombParams;
 
     [Title("Lasers", "white", "red")]
 
     [LineTitle("Vertical laser")]
     [SerializeField] VerticalLaserParams[] _verticalLaserParams;
     VerticalLaserParams _currentVerticalLaserParams;
-    public VerticalLaserParams CurrentVerticalLaserParams { get { return _currentVerticalLaserParams;} }
+    public VerticalLaserParams CurrentVerticalLaserParams => _currentVerticalLaserParams;
 
     [LineTitle("Horizontal laser")]
     [SerializeField] HorizontalLaserParams[] _horizontalLaserParams;
     HorizontalLaserParams _currentHorizontalLaserParams;
-    public HorizontalLaserParams CurrentHorizontalLaserParams { get { return _currentHorizontalLaserParams; } }
+    public HorizontalLaserParams CurrentHorizontalLaserParams => _currentHorizontalLaserParams;
+
+    [Title("Followers","white", "light blue")]
+    [SerializeField] RocketParams[] _rocketParams;
+    RocketParams _currentRocketParams;
+    public RocketParams CurrentRocketParams => _currentRocketParams;
+
 
     private void Awake()
     {
@@ -46,9 +57,17 @@ public class TrapsManager : MonoBehaviour
 
     public void SetTrapsParamsLevel(int levelIndex)
     {
+        // ----- Falling ----- //
+
         // Bear Trap
         if (_bearTrapsParams[levelIndex] != null) _currentBearTrapsParams = _bearTrapsParams[levelIndex];
         else Debug.LogWarning($"Bear Traps Params : difficulty level {levelIndex} is not set in Traps Manager");
+
+        // Bomb
+        if (_bombsParams[levelIndex] != null) _currentBombParams = _bombsParams[levelIndex];
+        else Debug.LogWarning($"Bomb Params : difficulty level {levelIndex} is not set in Traps Manager");
+
+        // ----- Lasers ----- //
 
         // Vertical Laser
         if (_verticalLaserParams[levelIndex] != null) _currentVerticalLaserParams = _verticalLaserParams[levelIndex];
@@ -57,6 +76,12 @@ public class TrapsManager : MonoBehaviour
         // Horizontal Laser
         if (_horizontalLaserParams[levelIndex] != null) _currentHorizontalLaserParams = _horizontalLaserParams[levelIndex];
         else Debug.LogWarning($"Horizontal Laser Params : difficulty level {levelIndex} is not set in Traps Manager");
+
+        // ----- Followers ----- //
+
+        // Rocket
+        if (_rocketParams[levelIndex] != null) _currentRocketParams = _rocketParams[levelIndex];
+        else Debug.LogWarning($"Rocket Params : difficulty level {levelIndex} is not set in Traps Manager");
     }
 
     // ---------- Traps Spawn ---------- //
@@ -140,8 +165,9 @@ public class TrapsManager : MonoBehaviour
 
 public enum TrapType
 {
-    FallingTrap,
-    Laser
+    Falling,
+    Laser,
+    Followers
 
 }
 

@@ -2203,7 +2203,7 @@ GameObject:
   - component: {fileID: 40980624}
   m_Layer: 7
   m_Name: Wall Right
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12946,7 +12946,7 @@ GameObject:
   - component: {fileID: 304323318}
   m_Layer: 7
   m_Name: Wall Down
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -74874,7 +74874,7 @@ GameObject:
   - component: {fileID: 1799975831}
   m_Layer: 7
   m_Name: Wall Left
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -75290,7 +75290,7 @@ GameObject:
   - component: {fileID: 1807184667}
   m_Layer: 7
   m_Name: Wall Up
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -76173,14 +76173,22 @@ MonoBehaviour:
     - Name: Bear Trap
       Type: 0
       TrapPrefab: {fileID: 4024949272276544279, guid: 6054e9df246987747b80d702f81dc228, type: 3}
-      percentChance: 60
+      percentChance: 30
     - Name: Vertical laser
       Type: 1
       TrapPrefab: {fileID: 4234913643615043220, guid: a7da6c8579ca1f9498c96422ae26c9c1, type: 3}
-      percentChance: 20
+      percentChance: 10
     - Name: Horizontal laser
       Type: 1
       TrapPrefab: {fileID: 3201523970001059526, guid: 403625fdf6996cc49a97e0b44d0b71a7, type: 3}
+      percentChance: 10
+    - Name: Bomb
+      Type: 0
+      TrapPrefab: {fileID: 8028334181432823470, guid: 3fb5b17188920774b8adffd86646a130, type: 3}
+      percentChance: 30
+    - Name: Rocket
+      Type: 2
+      TrapPrefab: {fileID: 6386203581497379460, guid: 868141110bf6332478fda28a99dbb550, type: 3}
       percentChance: 20
     TrapSpawnRateCurve:
       serializedVersion: 2
@@ -78978,6 +78986,8 @@ MonoBehaviour:
       MaxCountInMap: 6
     - TrapType: 1
       MaxCountInMap: 2
+    - TrapType: 2
+      MaxCountInMap: 3
   _bearTrapsParams:
   - SpawnYOffset: 4
     SpawnRadius: 2
@@ -79011,6 +79021,40 @@ MonoBehaviour:
     DeployDurationEnd: 0.3
     DestroyDurationStart: 3
     DestroyDurationEnd: 4
+  _bombsParams:
+  - SpawnYOffset: 4
+    SpawnRadius: 2
+    ExplosionRange: 3
+    FallCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    FallDurationStart: 2
+    FallDurationEnd: 1.5
+    ExplodeDurationStart: 3
+    ExplodeDurationEnd: 2
+    ExplosionDurationStart: 0.1
+    ExplosionDurationEnd: 0.15
   _verticalLaserParams:
   - SpawnOffset: 0
     LaserWidth: 0.1
@@ -79038,8 +79082,8 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    MinMovementTimeStart: 4
-    MaxMovementTimeEnd: 3
+    MovementTimeStart: 4
+    MovementTimeEnd: 3
   _horizontalLaserParams:
   - SpawnOffset: 0
     LaserWidth: 0.1
@@ -79067,8 +79111,14 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    MinMovementTimeStart: 4
-    MaxMovementTimeEnd: 3
+    MovementTimeStart: 4
+    MovementTimeEnd: 3
+  _rocketParams:
+  - SpawnOffset: 1
+    MovementSpeedStart: 5
+    MovementSpeedEnd: 6
+    RotationSpeedStart: 25
+    RotationSpeedEnd: 30
 --- !u!1 &1872498393
 GameObject:
   m_ObjectHideFlags: 0

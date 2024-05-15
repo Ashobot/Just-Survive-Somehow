@@ -17,10 +17,7 @@ public class HorizontalLaserScript : MonoBehaviour
     private void Awake()
     {
         // Get Game Manager
-        if (GameObject.Find("Game Manager").TryGetComponent<GameManager>(out GameManager gm))
-            _gameManager = gm;
-        else
-            Debug.LogWarning("Game Manager not found");
+        _gameManager = FindObjectOfType<GameManager>();
     }
 
     private void Start()
@@ -50,7 +47,7 @@ public class HorizontalLaserScript : MonoBehaviour
         float currentWavePercent = _gameManager.GameLoopManager.CurrentWavePercent;
 
         _trapParams = _gameManager.TrapsManager.CurrentHorizontalLaserParams;
-        _currentMovementTime = Mathf.Lerp(_trapParams.MinMovementTimeStart, _trapParams.MaxMovementTimeEnd, currentWavePercent);
+        _currentMovementTime = Mathf.Lerp(_trapParams.MovementTimeStart, _trapParams.MovementTimeEnd, currentWavePercent);
     }
 
     void SetPositions()
@@ -89,6 +86,6 @@ public class HorizontalLaserParams
     [MinValue(0)] public float LaserWidth;
     public AnimationCurve MovementCurve;
     [Space]
-    [MinValue(0)] public float MinMovementTimeStart;
-    [MinValue(0)] public float MaxMovementTimeEnd;
+    [MinValue(0)] public float MovementTimeStart;
+    [MinValue(0)] public float MovementTimeEnd;
 }

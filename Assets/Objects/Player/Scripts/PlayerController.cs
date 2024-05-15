@@ -8,8 +8,11 @@ public class PlayerController : MonoBehaviour
     // ----- Variables ----- //
 
     // Player components
-    public PlayerMovement PlayerMovement { get { return _playerMovement; } }
     PlayerMovement _playerMovement;
+    public PlayerMovement PlayerMovement => _playerMovement;
+
+    PlayerTriggers _playerTriggers;
+    public PlayerTriggers PlayerTrigger => _playerTriggers;
 
     // Other components
     public InputsManager InputManager { get { return _inputManager; } }
@@ -18,6 +21,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         _playerMovement = GetComponent<PlayerMovement>();
+        _playerTriggers = GetComponent<PlayerTriggers>();
     }
 
 }
