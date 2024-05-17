@@ -5,14 +5,20 @@ using UltimateAttributesPack;
 public class BearTrapScript : MonoBehaviour
 {
     GameManager _gameManager;
+    PlayerController _playerController;
     BearTrapParams _trapParams;
     CircleCollider2D _collider;
 
+    [SerializeField] LayerMask _playerLayerMask;
+    [Space]
     [SerializeField] GameObject _shadowObject;
     [SerializeField] GameObject _trapObject;
     [SerializeField] GameObject _deathZone;
+    [Space]
+    [SerializeField] Animator _animator;
 
     Vector2 _startPosition;
+    bool _playerOn;
     bool _atGround;
     bool _deployed;
     float _fallTimer;
@@ -32,6 +38,8 @@ public class BearTrapScript : MonoBehaviour
 
     private void Start()
     {
+        _playerController = _gameManager.PlayerController;
+
         InitializeTrapParams(); // Set current trap params with current wave percent (difficulty)
         SetPositions(); // Set the object position and rotation at random
         ActivateObject(); // Activate objects
@@ -61,6 +69,8 @@ public class BearTrapScript : MonoBehaviour
                 _shadowObject.SetActive(false);
                 _collider.isTrigger = false;
                 _atGround = true;
+
+                _animator.SetBool("AtGround", true);
             }
         }
         // Is deploying
@@ -71,15 +81,20 @@ public class BearTrapScript : MonoBehaviour
             else
             {
                 _deathZone.SetActive(true);
-                _trapObject.GetComponent<SpriteRenderer>().color = Color.red;
                 _deployed = true;
+
+                _animator.SetBool("IsArmed", true);
             }
         }
         // Trap armed
         else
         {
             if (_destroyTimer < _currentDestroyDuration)
+            {
+                DamageToPlayer();
+
                 _destroyTimer += Time.deltaTime;
+            }
             else
                 DestroyTrap();
         }
@@ -112,9 +127,15 @@ public class BearTrapScript : MonoBehaviour
         // Set trap position to up offset
         _startPosition = new Vector3(randomSpawnPosition.x, randomSpawnPosition.y + _trapParams.SpawnYOffset);
         _trapObject.transform.position = _startPosition;
+    }
 
-        // Set trap rotation to random
-        _trapObject.transform.eulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(0f, 360f));
+    void DamageToPlayer()
+    {
+        if (_playerOn && _playerController.PlayerTrigger.CanTakeDamage)
+        {
+            _playerController.PlayerTrigger.SetDamage();
+            _animator.SetBool("Damage", true);
+        }
     }
 
     void ActivateObject()
@@ -126,6 +147,18 @@ public class BearTrapScript : MonoBehaviour
     void DestroyTrap()
     {
         Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if((_playerLayerMask.value & (1 << collision.transform.gameObject.layer)) > 0)
+            _playerOn = true;
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if ((_playerLayerMask.value & (1 << collision.transform.gameObject.layer)) > 0)
+            _playerOn = false;
     }
 }
 

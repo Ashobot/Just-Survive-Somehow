@@ -14,6 +14,9 @@ public class PlayerController : MonoBehaviour
     PlayerTriggers _playerTriggers;
     public PlayerTriggers PlayerTrigger => _playerTriggers;
 
+    PlayerAnimations _playerAnimations;
+    public PlayerAnimations PlayerAnimations => _playerAnimations;
+
     // Other components
     public InputsManager InputManager { get { return _inputManager; } }
     [SerializeField, Required(false)] InputsManager _inputManager;
@@ -22,6 +25,7 @@ public class PlayerController : MonoBehaviour
     {
         _playerMovement = GetComponent<PlayerMovement>();
         _playerTriggers = GetComponent<PlayerTriggers>();
+        _playerAnimations = GetComponent<PlayerAnimations>();
     }
 
 }

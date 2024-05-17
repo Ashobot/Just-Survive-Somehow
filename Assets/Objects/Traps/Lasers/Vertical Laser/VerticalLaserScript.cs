@@ -5,10 +5,13 @@ using UltimateAttributesPack;
 public class VerticalLaserScript : MonoBehaviour
 {
     GameManager _gameManager;
+    PlayerController _playerController;
     VerticalLaserParams _trapParams;
+    SpriteRenderer _spriteRenderer;
 
-    [SerializeField] GameObject _laserObject;
+    [SerializeField] LayerMask _playerLayerMask;
 
+    bool _playerOn;
     float _startY;
     float _endY;
     float _currentMovementTime;
@@ -18,10 +21,14 @@ public class VerticalLaserScript : MonoBehaviour
     {
         // Get Game Manager
         _gameManager = FindObjectOfType<GameManager>();
+
+        _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void Start()
     {
+        _playerController = _gameManager.PlayerController;
+
         InitializeTrapParams();
         SetPositions();
         ActivateObject();
@@ -32,6 +39,8 @@ public class VerticalLaserScript : MonoBehaviour
         if(_currentMovementTimer < _currentMovementTime)
         {
             transform.position = new Vector2(0, Mathf.Lerp(_startY, _endY, _trapParams.MovementCurve.Evaluate(_currentMovementTimer / _currentMovementTime)));
+
+            DamageToPlayer();
 
             _currentMovementTimer += Time.deltaTime;
         }
@@ -59,21 +68,42 @@ public class VerticalLaserScript : MonoBehaviour
 
         // Set laser position
         transform.position = new Vector2(0, _startY);
-        _laserObject.transform.position = new Vector2(0, _startY);
 
         // Set laser scale
         float arenaWidth = Vector3.Distance(_gameManager.ArenaManager.WallLeft.transform.position, _gameManager.ArenaManager.WallRight.transform.position);
-        _laserObject.transform.localScale = new Vector2(arenaWidth, _trapParams.LaserWidth);
+        transform.localScale = new Vector2(arenaWidth, _trapParams.LaserWidth);
+    }
+
+    void DamageToPlayer()
+    {
+        if (_playerOn && _playerController.PlayerTrigger.CanTakeDamage)
+        {
+            _playerController.PlayerTrigger.SetDamage();
+
+            // Animation
+        }
     }
 
     void ActivateObject()
     {
-        _laserObject.SetActive(true);
+        _spriteRenderer.enabled = true;
     }
 
     void DestroyTrap()
     {
         Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if ((_playerLayerMask.value & (1 << collision.transform.gameObject.layer)) > 0)
+            _playerOn = true;
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if ((_playerLayerMask.value & (1 << collision.transform.gameObject.layer)) > 0)
+            _playerOn = false;
     }
 }
 

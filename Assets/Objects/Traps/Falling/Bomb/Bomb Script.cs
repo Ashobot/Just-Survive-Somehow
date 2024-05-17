@@ -5,15 +5,19 @@ using UltimateAttributesPack;
 public class BombScript : MonoBehaviour
 {
     GameManager _gameManager;
+    PlayerController _playerController;
     BombParams _trapParams;
     CircleCollider2D _collider;
 
+    [SerializeField] LayerMask _playerLayerMask;
+    [Space]
     [SerializeField] GameObject _shadowObject;
     [SerializeField] GameObject _bombObject;
     [SerializeField] GameObject _deathZonePreview;
     [SerializeField] GameObject _deathZone;
 
     Vector2 _startPosition;
+    bool _playerOn;
     bool _atGround;
     bool _exploded;
     float _fallTimer;
@@ -33,6 +37,8 @@ public class BombScript : MonoBehaviour
 
     private void Start()
     {
+        _playerController = _gameManager.PlayerController;
+
         InitializeTrapParams(); // Set current trap params with current wave percent (difficulty)
         SetPositions(); // Set the object position and rotation at random
         ActivateObject(); // Activate objects
@@ -83,7 +89,11 @@ public class BombScript : MonoBehaviour
         else
         {
             if (_explosionTimer < _currentExplosionDuration)
+            {
+                DamageToPlayer();
+
                 _explosionTimer += Time.deltaTime;
+            }
             else
             {
                 DestroyTrap();
@@ -125,6 +135,16 @@ public class BombScript : MonoBehaviour
         _bombObject.transform.eulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(0f, 360f));
     }
 
+    void DamageToPlayer()
+    {
+        if (_playerOn && _playerController.PlayerTrigger.CanTakeDamage)
+        {
+            _playerController.PlayerTrigger.SetDamage();
+
+            // Explosion animation
+        }
+    }
+
     void ActivateObject()
     {
         _shadowObject.SetActive(true);
@@ -134,6 +154,18 @@ public class BombScript : MonoBehaviour
     void DestroyTrap()
     {
         Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if ((_playerLayerMask.value & (1 << collision.transform.gameObject.layer)) > 0)
+            _playerOn = true;
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if ((_playerLayerMask.value & (1 << collision.transform.gameObject.layer)) > 0)
+            _playerOn = false;
     }
 }
 

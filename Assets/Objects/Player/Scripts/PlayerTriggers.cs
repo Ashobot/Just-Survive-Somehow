@@ -12,9 +12,10 @@ public class PlayerTriggers : MonoBehaviour
     [SerializeField] float _invincibleTime;
     [SerializeField] float _damagedTime;
 
-    List<Collider2D> _overlapedTraps = new List<Collider2D>();
-    float _invincibleTimer;
+    bool _canTakeDamage;
+    public bool CanTakeDamage => _canTakeDamage;
     bool _isInvincible;
+    float _invincibleTimer;
     float _damagedTimer;
     bool _isDead;
     bool _isDamaged;
@@ -32,21 +33,18 @@ public class PlayerTriggers : MonoBehaviour
 
     private void Update()
     {
+        ManageCanTakeDamage();
+
         if (_isDamaged)
-            DamagedCooldown();
+            DamagedCooldown();   
+    }
+
+    void ManageCanTakeDamage()
+    {
+        if(_isInvincible || _playerController.PlayerMovement.IsDashing)
+            _canTakeDamage = false;
         else
-            DetectIfDamage();     
-    }
-
-    public void RemoveOverlappedTrap(Collider2D col)
-    {
-        _overlapedTraps.Remove(col);
-    }
-
-    void DetectIfDamage()
-    {
-        if (!_playerController.PlayerMovement.IsDashing && _overlapedTraps.Count > 0)
-            SetDamage();
+            _canTakeDamage = true;
     }
 
     public void SetDamage()
@@ -80,8 +78,6 @@ public class PlayerTriggers : MonoBehaviour
         }
         else
         {
-            DetectIfDamage();
-
             if (_damagedTimer < _damagedTime)
             {
                 // Set new player movement and dash from damaged speed to normal
@@ -112,31 +108,12 @@ public class PlayerTriggers : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // Walk on death zone
-        if(collision.tag == _deathZoneTag)
-        {
-            if(!_overlapedTraps.Contains(collision))
-                _overlapedTraps.Add(collision);
-        }
-
         // Walk on activated slab
         if(collision.tag == _slabTag)
         {
             if(collision.gameObject.TryGetComponent<SlabScript>(out SlabScript slab))
             {
                 _gameManager.ArenaManager.WalkOnSlab(slab);
-            }
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        // Leave death zone
-        if (collision.tag == _deathZoneTag)
-        {
-            if (_overlapedTraps.Contains(collision))
-            {
-                _overlapedTraps.Remove(collision);
             }
         }
     }

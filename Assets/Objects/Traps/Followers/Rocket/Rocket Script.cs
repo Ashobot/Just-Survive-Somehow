@@ -9,8 +9,8 @@ public class RocketScript : MonoBehaviour
     RocketParams _trapParams;
 
     [SerializeField] Transform _targetRotator;
-    [SerializeField, Tag] string _playerTag;
-    [SerializeField, Tag] string _wallTag;
+    [SerializeField] LayerMask _playerLayerMask;
+    [SerializeField] LayerMask _wallLayerMask;
 
     bool _onSpawnWall = true;
     float _currentMovementSpeed;
@@ -103,7 +103,7 @@ public class RocketScript : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         // Detect if collides with wall
-        if (collision.tag == _wallTag)
+        if ((_wallLayerMask.value & (1 << collision.transform.gameObject.layer)) > 0)
         {
             if (_onSpawnWall)
                 _onSpawnWall = false;
@@ -112,7 +112,7 @@ public class RocketScript : MonoBehaviour
         }
 
         // Detect if collides with player
-        if(collision.tag == _playerTag && !_playerController.PlayerMovement.IsDashing)
+        if ((_playerLayerMask.value & (1 << collision.transform.gameObject.layer)) > 0 && _playerController.PlayerTrigger.CanTakeDamage)
         {
             _playerController.PlayerTrigger.SetDamage();
             DestroyTrap();

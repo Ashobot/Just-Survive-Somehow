@@ -299,6 +299,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4380e90fd79e648a143454b19d01ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
   _shadowObject: {fileID: 5838482636197053900}
   _bombObject: {fileID: 2671216644257124482}
   _deathZonePreview: {fileID: 8877537140844499269}

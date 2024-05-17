@@ -40,6 +40,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField, ShowIf(nameof(_smoothChangeDirection), true), MinValue(0)] float _moveChangeDirectionSpeed = 5f;
     [SerializeField] bool _normalizeMovement;
     bool _isMoving;
+    public bool IsMoving => _isMoving;
+    float _lastY;
+    public float LastY => _lastY;
     float _currentMovementSpeed;
 
     // Dash
@@ -71,7 +74,7 @@ public class PlayerMovement : MonoBehaviour
     float _dashTimer = 0f;
     bool _canDash = true;
     bool _isDashing = false;
-    public bool IsDashing { get { return _isDashing; } }
+    public bool IsDashing => _isDashing;
     Vector2 _startDashPos;
     Vector2 _endDashPos;
     Vector2 _lastDashTargetEndPos;
@@ -151,6 +154,8 @@ public class PlayerMovement : MonoBehaviour
         if(_inputsManager.MoveInput != Vector2.zero && !_isDashing)
         {
             _isMoving = true;
+
+            _lastY = _inputsManager.MoveInput.y;
 
             if(_smoothChangeDirection) // Smooth change direction when moving if it's activated
                 _rb.MovePosition((Vector2)transform.position + ((Vector2)_currentRotator.up * _currentMovementSpeed * Time.deltaTime * (_normalizeMovement ? _inputsManager.MoveInput.magnitude : 1)));
