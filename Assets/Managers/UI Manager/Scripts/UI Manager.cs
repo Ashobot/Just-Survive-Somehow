@@ -61,7 +61,6 @@ public class UIManager : MonoBehaviour
     {
         _deathMenuObj.SetActive(state);
         SetFirstSelectedObject(_deathMenuFirstSelectedObj);
-        Time.timeScale = state ? 0 : 1; // Pause or unpause time
         _inDeathMenu = state;
     }
 

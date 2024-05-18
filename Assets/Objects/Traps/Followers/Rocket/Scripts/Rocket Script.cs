@@ -11,33 +11,47 @@ public class RocketScript : MonoBehaviour
     [SerializeField] Transform _targetRotator;
     [SerializeField] LayerMask _playerLayerMask;
     [SerializeField] LayerMask _wallLayerMask;
+    [Space]
+    [SerializeField] ParticleSystem _particleSystem;
+    [SerializeField] GameObject _explosionPrefab;
 
+    bool _destroyed = false;
     bool _onSpawnWall = true;
     float _currentMovementSpeed;
     float _currentRotationSpeed;
 
     SpriteRenderer _spriteRenderer;
+    BoxCollider2D _boxCollider;
 
     private void Awake()
     {
         // Get Game Manager
         _gameManager = FindObjectOfType<GameManager>();  
+        _playerController = _gameManager.PlayerController;
 
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        _boxCollider = GetComponent<BoxCollider2D>();
+
+        InitializeTrapParams();
+        SetPositions();
     }
 
     private void Start()
     {
-        _playerController = _gameManager.PlayerController;
-
-        InitializeTrapParams();
-        SetPositions();
         ActivateObject();
     }
 
     private void Update()
     {
-        Move();
+        if (_destroyed)
+        {
+            if(_particleSystem == null)
+                Destroy(gameObject);
+        }
+        else
+        {
+            Move();
+        }
     }
 
     public void InitializeTrapParams()
@@ -97,7 +111,10 @@ public class RocketScript : MonoBehaviour
 
     void DestroyTrap()
     {
-        Destroy(gameObject);
+        _boxCollider.enabled = false;
+        _spriteRenderer.enabled = false;
+        Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+        _particleSystem.Stop();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -108,13 +125,17 @@ public class RocketScript : MonoBehaviour
             if (_onSpawnWall)
                 _onSpawnWall = false;
             else
+            {
+                _destroyed = true;
                 DestroyTrap();
+            }
         }
 
         // Detect if collides with player
         if ((_playerLayerMask.value & (1 << collision.transform.gameObject.layer)) > 0 && _playerController.PlayerTrigger.CanTakeDamage)
         {
             _playerController.PlayerTrigger.SetDamage();
+            _destroyed = true;
             DestroyTrap();
         }
     }

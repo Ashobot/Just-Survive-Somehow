@@ -21,16 +21,16 @@ public class HorizontalLaserScript : MonoBehaviour
     {
         // Get Game Manager
         _gameManager = FindObjectOfType<GameManager>();
+        _playerController = _gameManager.PlayerController;
 
         _spriteRenderer = GetComponent<SpriteRenderer>();
+
+        InitializeTrapParams();
+        SetPositions();
     }
 
     private void Start()
     {
-        _playerController = _gameManager.PlayerController;
-
-        InitializeTrapParams();
-        SetPositions();
         ActivateObject();
     }
 

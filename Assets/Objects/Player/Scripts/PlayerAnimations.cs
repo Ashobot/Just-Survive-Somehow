@@ -23,8 +23,11 @@ public class PlayerAnimations : MonoBehaviour
 
     private void Update()
     {
-        ManageAnimatorParameters();
-        ManageFlipX();      
+        if (!_controller.PlayerTrigger.IsDead)
+        {
+            ManageAnimatorParameters();
+            ManageFlipX();      
+        }
     }
 
     void ManageFlipX()
@@ -49,6 +52,10 @@ public class PlayerAnimations : MonoBehaviour
             _animator.SetFloat("MovementY", _inputsManager.MoveInput.y);
         else
             _animator.SetFloat("MovementY", (_controller.PlayerMovement.LastY > 0 ? 1 : -1));
+    }
 
+    public void SetDeathAnimation()
+    {
+        _animator.SetBool("IsDead", true);
     }
 }

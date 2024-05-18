@@ -27,7 +27,7 @@ public class DifficultyManager : MonoBehaviour
 
     private void Update()
     {
-        if (!_gameManager.GameLoopManager.WaveFinished)
+        if (!_gameManager.GameLoopManager.WaveFinished && !_gameManager.PlayerController.PlayerTrigger.IsDead)
         {
             RefreshTrapSpawnRate();
             ManageTrapSpawn();
@@ -45,6 +45,7 @@ public class DifficultyManager : MonoBehaviour
         _currentTrapSpawnRate = _currentDifficultyParams.TrapSpawnRateMin; // Set trap spawn rate to min of wave
         _gameManager.GameLoopManager.ResetWaveTimer(); // Set wave timer to 0
         _gameManager.TrapsManager.SetTrapsParamsLevel(newWaveIndex); // Set all traps params to the new difficulty level
+        _gameManager.ArenaManager.SetSlabsOfWave(newWaveIndex);
     }
 
     /// <summary>

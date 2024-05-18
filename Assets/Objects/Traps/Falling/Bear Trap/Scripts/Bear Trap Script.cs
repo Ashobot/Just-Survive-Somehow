@@ -32,16 +32,16 @@ public class BearTrapScript : MonoBehaviour
     {
         // Get Game Manager
         _gameManager = FindObjectOfType<GameManager>();
+        _playerController = _gameManager.PlayerController;
 
         _collider = GetComponent<CircleCollider2D>();
+
+        InitializeTrapParams(); // Set current trap params with current wave percent (difficulty)
+        SetPositions(); // Set the object position and rotation at random
     }
 
     private void Start()
     {
-        _playerController = _gameManager.PlayerController;
-
-        InitializeTrapParams(); // Set current trap params with current wave percent (difficulty)
-        SetPositions(); // Set the object position and rotation at random
         ActivateObject(); // Activate objects
     }
 

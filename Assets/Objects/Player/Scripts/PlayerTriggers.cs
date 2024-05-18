@@ -18,6 +18,7 @@ public class PlayerTriggers : MonoBehaviour
     float _invincibleTimer;
     float _damagedTimer;
     bool _isDead;
+    public bool IsDead => _isDead;
     bool _isDamaged;
 
     [Title("Slabs")]
@@ -102,6 +103,7 @@ public class PlayerTriggers : MonoBehaviour
         if (!_isDead)
         {
             _gameManager.UIManager.SetDeathMenu(true);
+            _playerController.PlayerAnimations.SetDeathAnimation();
             _isDead = true;
         }
     }

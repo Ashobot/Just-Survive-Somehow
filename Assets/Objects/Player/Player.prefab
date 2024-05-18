@@ -10,11 +10,13 @@ GameObject:
   m_Component:
   - component: {fileID: 3250954874631609477}
   - component: {fileID: 8068554181152909733}
+  - component: {fileID: 1454640934376680068}
   - component: {fileID: 2518310807005860396}
   - component: {fileID: 1994739383656782806}
   - component: {fileID: 319786652490130040}
   - component: {fileID: 1576752978735742232}
   - component: {fileID: 764546952152589732}
+  - component: {fileID: 3321515148220444733}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -80,7 +82,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 10
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: -261367170, guid: 92a86445befc3714cb1220195e3b4ab4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -91,6 +93,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &1454640934376680068
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2384579023900112698}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6cff115534ca9f54fb4dd82b40bb8f3e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 2
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!50 &2518310807005860396
 Rigidbody2D:
   serializedVersion: 4
@@ -152,7 +175,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.7
 --- !u!114 &319786652490130040
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,6 +204,31 @@ MonoBehaviour:
   _currentRotator: {fileID: 9075537285638444616}
   _targetRotator: {fileID: 1734456305336478477}
   _movementSpeed: 8
+  _damagedMovementSpeed: 4
+  _damagedMovementSpeedRecuperationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _smoothChangeDirection: 0
   _moveChangeDirectionSpeed: 600
   _normalizeMovement: 1
@@ -213,7 +261,9 @@ MonoBehaviour:
     m_RotationOrder: 4
   _dashLenght: 4
   _dashDuration: 0.5
-  _colorWhenDash: {r: 1, g: 0.40945286, b: 0, a: 1}
+  _damagedDashLenght: 3
+  _damagedDashDuration: 0.4
+  _colorWhenDash: {r: 1, g: 1, b: 1, a: 0.5882353}
   _showDebug: 0
   _currentForwardDebugColor: {r: 1, g: 0.98475426, b: 0, a: 1}
   _targetForwardDebugColor: {r: 0, g: 0.44399452, b: 1, a: 1}
@@ -230,10 +280,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55190f35141bbbc49a9ee5410d181b5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _uiManager: {fileID: 0}
   _deathZoneTag: DeathZone
   _invincibleTime: 0.5
-  _riskDeathTime: 3
+  _damagedTime: 3
+  _slabTag: Slab
+--- !u!114 &3321515148220444733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2384579023900112698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cde9556e08be1d8488288e2c86763ad2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5497253838094328811
 GameObject:
   m_ObjectHideFlags: 0

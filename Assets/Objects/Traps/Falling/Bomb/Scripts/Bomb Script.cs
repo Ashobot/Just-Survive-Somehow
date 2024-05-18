@@ -8,6 +8,7 @@ public class BombScript : MonoBehaviour
     PlayerController _playerController;
     BombParams _trapParams;
     CircleCollider2D _collider;
+    SpriteRenderer _bombSpriteRenderer;
 
     [SerializeField] LayerMask _playerLayerMask;
     [Space]
@@ -15,6 +16,10 @@ public class BombScript : MonoBehaviour
     [SerializeField] GameObject _bombObject;
     [SerializeField] GameObject _deathZonePreview;
     [SerializeField] GameObject _deathZone;
+    [SerializeField] Color _lerpToColor;
+    [SerializeField] Vector2 _lerpToScale;
+    [Space]
+    [SerializeField] GameObject _explosionPrefab;
 
     Vector2 _startPosition;
     bool _playerOn;
@@ -31,16 +36,17 @@ public class BombScript : MonoBehaviour
     {
         // Get Game Manager
         _gameManager = FindObjectOfType<GameManager>();
+        _playerController = _gameManager.PlayerController;
 
         _collider = GetComponent<CircleCollider2D>();
+        _bombSpriteRenderer = _bombObject.GetComponent<SpriteRenderer>();
+
+        InitializeTrapParams(); // Set current trap params with current wave percent (difficulty)
+        SetPositions(); // Set the object position and rotation at random
     }
 
     private void Start()
     {
-        _playerController = _gameManager.PlayerController;
-
-        InitializeTrapParams(); // Set current trap params with current wave percent (difficulty)
-        SetPositions(); // Set the object position and rotation at random
         ActivateObject(); // Activate objects
     }
 
@@ -75,13 +81,23 @@ public class BombScript : MonoBehaviour
         else if (_atGround && !_exploded)
         {
             if (_explodeTimer < _currentExplodeDuration)
+            {
+                // Lerp color of the bomb (from normal to red)
+                _bombSpriteRenderer.color = Color.Lerp(Color.white, _lerpToColor, _explodeTimer / _currentExplodeDuration);
+
+                // Lerp scale of the bomb
+                _bombObject.transform.localScale = Vector3.Lerp(transform.localScale, _lerpToScale, _explodeTimer / _currentExplodeDuration);
+
                 _explodeTimer += Time.deltaTime;
+            }
             else
             {
-                //Explosion animation
+                _bombSpriteRenderer.color = _lerpToColor;
+
+                // Instanciate explosion
+                Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
 
                 _deathZone.SetActive(true);
-                _deathZonePreview.GetComponent<SpriteRenderer>().color = Color.red;
                 _exploded = true;
             }
         }
@@ -130,9 +146,6 @@ public class BombScript : MonoBehaviour
         // Set trap position to up offset
         _startPosition = new Vector3(randomSpawnPosition.x, randomSpawnPosition.y + _trapParams.SpawnYOffset);
         _bombObject.transform.position = _startPosition;
-
-        // Set trap rotation to random
-        _bombObject.transform.eulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(0f, 360f));
     }
 
     void DamageToPlayer()

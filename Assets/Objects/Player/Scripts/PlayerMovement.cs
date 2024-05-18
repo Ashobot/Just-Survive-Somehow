@@ -121,10 +121,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Move();
+        if (!_playerController.PlayerTrigger.IsDead)
+        {
+            Move();
 
-        if (_isDashing)
-            Dash();
+            if (_isDashing)
+                Dash();
+        }
     }
 
     // ----- Rotations ----- //
