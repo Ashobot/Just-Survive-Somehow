@@ -187,6 +187,8 @@ public class BombScript : MonoBehaviour
 [Serializable]
 public class BombParams
 {
+    public string Name;
+    [Space]
     [MinValue(0)] public float SpawnYOffset;
     [MinValue(0)] public float SpawnRadius;
     [MinValue(0)] public float ExplosionRange;

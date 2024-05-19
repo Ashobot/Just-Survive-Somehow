@@ -45,29 +45,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _difficultyParams:
-  - WaveDuration: 30
-    ArenaSize: 8
+  - Name: First wave
+    WaveDuration: 90
     Traps:
     - Name: Bear Trap
       Type: 0
       TrapPrefab: {fileID: 4024949272276544279, guid: 6054e9df246987747b80d702f81dc228, type: 3}
-      percentChance: 30
-    - Name: Vertical laser
-      Type: 1
-      TrapPrefab: {fileID: 4234913643615043220, guid: a7da6c8579ca1f9498c96422ae26c9c1, type: 3}
-      percentChance: 10
-    - Name: Horizontal laser
-      Type: 1
-      TrapPrefab: {fileID: 3201523970001059526, guid: 403625fdf6996cc49a97e0b44d0b71a7, type: 3}
-      percentChance: 10
-    - Name: Bomb
-      Type: 0
-      TrapPrefab: {fileID: 8028334181432823470, guid: 3fb5b17188920774b8adffd86646a130, type: 3}
-      percentChance: 30
-    - Name: Rocket
-      Type: 2
-      TrapPrefab: {fileID: 6386203581497379460, guid: 868141110bf6332478fda28a99dbb550, type: 3}
-      percentChance: 20
+      percentChance: 100
+    WaveTrapTypes:
+      TrapCategories:
+      - TrapType: 0
+        MaxCountInMap: 12
     TrapSpawnRateCurve:
       serializedVersion: 2
       m_Curve:
@@ -92,7 +80,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    TrapSpawnRateMin: 0.5
+    TrapSpawnRateMin: 1
     TrapSpawnRateMax: 2
   _currentTrapSpawnRate: 0
   _currentSpawnTimer: 0

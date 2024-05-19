@@ -37,11 +37,6 @@ public class ArenaManager : MonoBehaviour
         _gameManager = FindObjectOfType<GameManager>();
     }
 
-    private void Start()
-    {
-        SetSlabsOfWave(0); // Set slabs to the first wave
-    }
-
     void RefreshArenaSize()
     {
         // Destroy all slabs
@@ -135,7 +130,7 @@ public class ArenaManager : MonoBehaviour
             }
             else
             {
-                WaveFinished();
+                _gameManager.GameLoopManager.SetWaveFinished(true);
             }
 
             _activatedSlabs.RemoveAt(0);
@@ -171,19 +166,13 @@ public class ArenaManager : MonoBehaviour
                 // If the next slabs list is empty, set next wave
                 else
                 {
-                    WaveFinished();
+                    _gameManager.GameLoopManager.SetWaveFinished(true);
                 }
             }
 
             _activatedSlabs.Remove(slab.gameObject);
         }
     }
-
-    void WaveFinished()
-    {
-        _gameManager.GameLoopManager.SetWaveFinished(true);
-    }
-
 }
 
 // ----- Serializable classes ----- //
@@ -197,6 +186,8 @@ public class SlabList
 [Serializable]
 public class SlabsPattern
 {
+    public string Name;
+    [Space]
     public bool OneByOne;
     public List<SlabList> SlabsActivated = new List<SlabList>();
     [Space]

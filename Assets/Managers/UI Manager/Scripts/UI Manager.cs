@@ -31,6 +31,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject _dialogueObject;
     [SerializeField] TextMeshProUGUI _dialogueText;
     public TextMeshProUGUI DialogueText => _dialogueText;
+    [Space]
+    [SerializeField] float _dialogueShowHideTime;
+    [SerializeField] AnimationCurve _dialogueShowHideCurve;
 
     // ----- General Functions ----- //
 
@@ -71,9 +74,33 @@ public class UIManager : MonoBehaviour
 
     // ----- Dialogues ----- //
 
-    public void SetDialogueState(bool state)
+    public IEnumerator DialogueShowAnimation()
     {
-        _dialogueObject.gameObject.SetActive(state);
+        float _timer = 0f;
+        _dialogueObject.transform.localScale = Vector2.zero;
+        _dialogueObject.SetActive(true);
+
+        while(_timer < _dialogueShowHideTime)
+        {
+            _dialogueObject.transform.localScale = Vector2.Lerp(Vector2.zero, Vector2.one, _dialogueShowHideCurve.Evaluate(_timer / _dialogueShowHideTime));
+            _timer += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+    public IEnumerator DialogueHideAnimation()
+    {
+        float _timer = 0f;
+
+        while (_timer < _dialogueShowHideTime)
+        {
+            _dialogueObject.transform.localScale = Vector2.Lerp(Vector2.one, Vector2.zero, _dialogueShowHideCurve.Evaluate(_timer / _dialogueShowHideTime));
+            _timer += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+
+        _dialogueObject.transform.localScale = Vector2.zero;
+        _dialogueObject.SetActive(false);
     }
 
     public void ClearDialogueText()
@@ -81,11 +108,13 @@ public class UIManager : MonoBehaviour
         _dialogueText.text = "";
     }
 
+    public void SetDialogueText(string text)
+    {
+        _dialogueText.text = text;
+    }
+
     public void AddDialogueChar(char character)
     {
         _dialogueText.text += character;
     }
-
-
-
 }

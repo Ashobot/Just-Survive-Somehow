@@ -41,8 +41,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] bool _normalizeMovement;
     bool _isMoving;
     public bool IsMoving => _isMoving;
-    float _lastY;
-    public float LastY => _lastY;
+    Vector2 _lastDirection;
+    public Vector2 LastDirection => _lastDirection;
     float _currentMovementSpeed;
 
     // Dash
@@ -158,7 +158,7 @@ public class PlayerMovement : MonoBehaviour
         {
             _isMoving = true;
 
-            _lastY = _inputsManager.MoveInput.y;
+            _lastDirection = _inputsManager.MoveInput;
 
             if(_smoothChangeDirection) // Smooth change direction when moving if it's activated
                 _rb.MovePosition((Vector2)transform.position + ((Vector2)_currentRotator.up * _currentMovementSpeed * Time.deltaTime * (_normalizeMovement ? _inputsManager.MoveInput.magnitude : 1)));

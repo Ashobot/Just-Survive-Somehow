@@ -10,9 +10,6 @@ public class TrapsManager : MonoBehaviour
     [SerializeField] Transform _trapsParentObject;
     public Transform TrapsParentObject => _trapsParentObject;
 
-    [Title("Traps categories")]
-    [SerializeField] WaveTrapTypes[] _waveTrapCategories;
-
     [Title("Falling", "white", "orange")]
 
     [LineTitle("Bear trap")]
@@ -49,12 +46,6 @@ public class TrapsManager : MonoBehaviour
         _gameManager = FindObjectOfType<GameManager>();
     }
 
-    private void Start()
-    {
-        // Initialize all the traps params to first wave params
-        SetTrapsParamsLevel(0);
-    }
-
     public void SetTrapsParamsLevel(int levelIndex)
     {
         // ----- Falling ----- //
@@ -89,8 +80,8 @@ public class TrapsManager : MonoBehaviour
     List<Trap> GetSpawnableTrapsList(DifficultyParams difficultyParams)
     {
         List<Trap> spawnableTraps = new List<Trap>();
-        int[] trapsPerCategories = new int[_waveTrapCategories[_gameManager.GameLoopManager.CurrentWaveIndex].TrapCategories.Length];
-             
+        int[] trapsPerCategories = new int[_gameManager.DifficultyManager.CurrentDifficultyParams.WaveTrapTypes.TrapCategories.Length];
+        
         // Foreach traps in traps parent
         foreach (TrapTypeScript trap in _trapsParentObject.GetComponentsInChildren<TrapTypeScript>())
         {
@@ -98,7 +89,7 @@ public class TrapsManager : MonoBehaviour
             for(int i = 0; i < trapsPerCategories.Length; i++)
             {
                 // If current trap is of the current trap category type
-                if (trap.TrapType == _waveTrapCategories[_gameManager.GameLoopManager.CurrentWaveIndex].TrapCategories[i].TrapType)
+                if (trap.TrapType == _gameManager.DifficultyManager.CurrentDifficultyParams.WaveTrapTypes.TrapCategories[i].TrapType)
                 {
                     trapsPerCategories[i]++; // Increment count of the current index of traps per category array
                     break;
@@ -113,10 +104,10 @@ public class TrapsManager : MonoBehaviour
             for(int i = 0; i < trapsPerCategories.Length; i++)
             {
                 // If the type of the trap is the same as trap categoty
-                if(trap.Type == _waveTrapCategories[_gameManager.GameLoopManager.CurrentWaveIndex].TrapCategories[i].TrapType)
+                if(trap.Type == _gameManager.DifficultyManager.CurrentDifficultyParams.WaveTrapTypes.TrapCategories[i].TrapType)
                 {
                     // If there is less trap of this type than max count of this type in the map
-                    if(trapsPerCategories[i] < _waveTrapCategories[_gameManager.GameLoopManager.CurrentWaveIndex].TrapCategories[i].MaxCountInMap)
+                    if(trapsPerCategories[i] < _gameManager.DifficultyManager.CurrentDifficultyParams.WaveTrapTypes.TrapCategories[i].MaxCountInMap)
                     {
                         spawnableTraps.Add(trap); // Add the trap in the spawnable trap list
                         break;

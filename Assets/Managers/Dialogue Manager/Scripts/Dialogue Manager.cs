@@ -2,23 +2,34 @@ using UnityEngine;
 using System;
 using System.Collections;
 using UltimateAttributesPack;
+using UnityEngine.Events;
+using System.Collections.Generic;
 
 public class DialogueManager : MonoBehaviour
 {
     GameManager _gameManager;
 
     [SerializeField] float _timeBetweenChars;
-    [SerializeField] WaveDialogues[] _dialogues;
+    [SerializeField] Dialogue _gameStartDialogue;
+    [Space]
+    [SerializeField] Dialogue[] _endWaveDialogues;
 
     bool _inDialogue;
+    DialogueType _currentDialogueType;
     int _currentWaveIndex = 0;
     int _currentDialogueIndex = 0;
     int _currentLineIndex = 0;
 
+    const string HTML_ALPHA = "<color=#00000000>";
 
     private void Awake()
     {
         _gameManager = FindObjectOfType<GameManager>();
+    }
+
+    private void Start()
+    {
+        StartDialogue(DialogueType.GameStart, 0, 0);
     }
 
     // Start a random end wave dialogue of wave
@@ -26,7 +37,7 @@ public class DialogueManager : MonoBehaviour
     {
         // Calculate max chance
         float maxChance = 0;
-        foreach (Dialogue dialogue in _dialogues[waveIndex].EndWaveDialogues)
+        foreach (DialogueParams dialogue in _endWaveDialogues[waveIndex].Dialogues)
             maxChance += dialogue.PercentChance;
 
         // Chech if total chance is less than 100, else log warning
@@ -37,22 +48,26 @@ public class DialogueManager : MonoBehaviour
         float chancesSum = 0;
 
         // Get random dialogue and start it
-        for (int i = 0; i < _dialogues[waveIndex].EndWaveDialogues.Length; i++)
+        for (int i = 0; i < _endWaveDialogues[waveIndex].Dialogues.Length; i++)
         {
-            if (rand >= chancesSum && rand <= _dialogues[waveIndex].EndWaveDialogues[i].PercentChance + chancesSum)
+            if (rand >= chancesSum && rand <= _endWaveDialogues[waveIndex].Dialogues[i].PercentChance + chancesSum)
             {
-                StartDialogue(waveIndex, i); // Start new dialogue
+                StartDialogue(DialogueType.EndWave ,waveIndex, i); // Start new dialogue
                 return;
             }
             else
-                chancesSum += _dialogues[waveIndex].EndWaveDialogues[i].PercentChance;
+                chancesSum += _endWaveDialogues[waveIndex].Dialogues[i].PercentChance;
         }
     }
 
-    void StartDialogue(int waveIndex, int dialogueIndex)
+    void StartDialogue(DialogueType dialogueType, int waveIndex, int dialogueIndex)
     {
-        _gameManager.UIManager.SetDialogueState(true);
+        _gameManager.UIManager.ClearDialogueText();
+        StartCoroutine(_gameManager.UIManager.DialogueShowAnimation());
+
         _inDialogue = true;
+
+        _currentDialogueType = dialogueType;
         _currentWaveIndex = waveIndex;
         _currentDialogueIndex = dialogueIndex;
         _currentLineIndex = 0;
@@ -62,9 +77,30 @@ public class DialogueManager : MonoBehaviour
     // Type the current line of current dialogue
     IEnumerator TypeLine()
     {
-        foreach (char c in _dialogues[_currentWaveIndex].EndWaveDialogues[_currentDialogueIndex].Lines[_currentLineIndex])
+        _gameManager.UIManager.ClearDialogueText();
+        int alphaIndex = 0;
+        string displayedText = "";
+
+        // Get current line
+        string currentDialogueLine = string.Empty;
+        switch (_currentDialogueType)
         {
-            _gameManager.UIManager.AddDialogueChar(c);
+            case DialogueType.GameStart:
+                currentDialogueLine = _gameStartDialogue.Dialogues[_currentDialogueIndex].Lines[_currentLineIndex];
+                break;
+            case DialogueType.EndWave:
+                currentDialogueLine = _endWaveDialogues[_currentWaveIndex].Dialogues[_currentDialogueIndex].Lines[_currentLineIndex];
+                break;
+        }
+        
+        // Type letters
+        foreach(char c in currentDialogueLine)
+        {
+            alphaIndex++;
+            _gameManager.UIManager.SetDialogueText(currentDialogueLine);
+            displayedText = _gameManager.UIManager.DialogueText.text.Insert(alphaIndex, HTML_ALPHA);
+            _gameManager.UIManager.SetDialogueText(displayedText);
+
             yield return new WaitForSeconds(_timeBetweenChars);
         }
     }
@@ -73,56 +109,88 @@ public class DialogueManager : MonoBehaviour
     public void NextLine()
     {
         // Return if not in dialogue
-        if (!_inDialogue)
+        if (!_inDialogue || Time.timeScale == 0)
             return;
 
+        // Get current line
+        string currentDialogueLine = string.Empty;
+        int currentDialogueLineCount = 0;
+        switch (_currentDialogueType)
+        {
+            case DialogueType.GameStart:
+                currentDialogueLine = _gameStartDialogue.Dialogues[_currentDialogueIndex].Lines[_currentLineIndex];
+                currentDialogueLineCount = _gameStartDialogue.Dialogues[_currentDialogueIndex].Lines.Length;
+                break;
+            case DialogueType.EndWave:
+                currentDialogueLine = _endWaveDialogues[_currentWaveIndex].Dialogues[_currentDialogueIndex].Lines[_currentLineIndex];
+                currentDialogueLineCount = _endWaveDialogues[_currentWaveIndex].Dialogues[_currentDialogueIndex].Lines.Length;
+                break;
+        }
+
         // If text is complete
-        if(_gameManager.UIManager.DialogueText.text == _dialogues[_currentWaveIndex].EndWaveDialogues[_currentDialogueIndex].Lines[_currentLineIndex])
+        if (_gameManager.UIManager.DialogueText.text == currentDialogueLine + HTML_ALPHA)
         {
             // If there is a line after, then type it
-            if(_currentLineIndex < _dialogues[_currentWaveIndex].EndWaveDialogues[_currentDialogueIndex].Lines.Length - 1)
+            if(_currentLineIndex < currentDialogueLineCount - 1)
             {
                 _currentLineIndex++;
                 _gameManager.UIManager.ClearDialogueText();
                 StartCoroutine(TypeLine());
             }
             else
+            {
                 EndDialogue();
+            }
         }
         // Else if text is not complete, complete it
         else
         {
             StopAllCoroutines();
-            _gameManager.UIManager.DialogueText.text = _dialogues[_currentWaveIndex].EndWaveDialogues[_currentDialogueIndex].Lines[_currentLineIndex];
+            _gameManager.UIManager.SetDialogueText(currentDialogueLine + HTML_ALPHA);
         }
     }
 
     void EndDialogue()
     {
-        _gameManager.UIManager.ClearDialogueText();
-        _gameManager.UIManager.SetDialogueState(false);
+        StartCoroutine(_gameManager.UIManager.DialogueHideAnimation());
+
         _inDialogue = false;
 
-        _gameManager.GameLoopManager.SetWaveFinished(false);
-        _gameManager.GameLoopManager.SetEndWaveDialogueStarted(false);
-        _gameManager.DifficultyManager.SetNextWave();
+        // Play end event of the dialogue
+        switch (_currentDialogueType)
+        {
+            case DialogueType.GameStart:
+                _gameStartDialogue.Dialogues[_currentDialogueIndex].OnEndEvent.Invoke();
+                break;
+            case DialogueType.EndWave:
+                _endWaveDialogues[_currentWaveIndex].Dialogues[_currentDialogueIndex].OnEndEvent.Invoke();
+                break;
+        }
     }
+}
 
+// ----- Enums ----- //
+
+enum DialogueType
+{
+    GameStart,
+    EndWave
 }
 
 // ----- Serializable classes ----- //
 
 [Serializable]
-public class WaveDialogues
-{
-    public string Name;
-    public Dialogue[] EndWaveDialogues;
-}
-
-[Serializable]
 public class Dialogue
 {
     public string Name;
+    public DialogueParams[] Dialogues;
+}
+
+[Serializable]
+public class DialogueParams
+{
+    public string Name;
     [MinValue(0)] public float PercentChance;
+    public UnityEvent OnEndEvent;
     [TextArea] public string[] Lines;
 }

@@ -112,6 +112,8 @@ public class VerticalLaserScript : MonoBehaviour
 [Serializable]
 public class VerticalLaserParams
 {
+    public string Name;
+    [Space]
     [MinValue(0)] public float SpawnOffset;
     [MinValue(0)] public float LaserWidth;
     public AnimationCurve MovementCurve;

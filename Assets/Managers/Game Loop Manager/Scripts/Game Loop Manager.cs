@@ -6,7 +6,7 @@ public class GameLoopManager : MonoBehaviour
 {
     GameManager _gameManager;
 
-    [SerializeField, ReadOnly] int _currentWaveIndex;
+    [SerializeField, ReadOnly] int _currentWaveIndex = -1;
     public int CurrentWaveIndex => _currentWaveIndex;
     [SerializeField, ProgressBar("", 0, 1, true)] float _currentWavePercent;
     public float CurrentWavePercent { get { return _currentWavePercent; } }
@@ -15,18 +15,29 @@ public class GameLoopManager : MonoBehaviour
 
     bool _waveFinished;
     public bool WaveFinished => _waveFinished;
-
     bool _endWaveDialogueStarted;
+    bool _gameStarted;
+    public bool GameStarted => _gameStarted;
 
     [LineTitle("Scenes Manager")]
     [SerializeField, Scene] int _gameSceneIndex;
 
     private void Awake()
     {
-        Time.timeScale = 1;
 
         // Get game manager
         _gameManager = FindObjectOfType<GameManager>();
+    }
+
+    private void Start()
+    {
+        Time.timeScale = 1;      
+        _currentWaveIndex = -1;
+    }
+
+    public void SetGameStarted(bool state)
+    {
+        _gameStarted = state;
     }
 
     public void SetWave(int index)
@@ -41,6 +52,9 @@ public class GameLoopManager : MonoBehaviour
 
     private void Update()
     {
+        if (!_gameStarted)
+            return;
+
         if(!_waveFinished)
             ManageWave();
         else
@@ -69,7 +83,7 @@ public class GameLoopManager : MonoBehaviour
             if(trapsInMap == 0)
             {
                 _gameManager.DialogueManager.StartRandomEndWaveDialogue(_currentWaveIndex);
-                SetEndWaveDialogueStarted(true);
+                _endWaveDialogueStarted = true;
             }
         }
     }
@@ -79,9 +93,12 @@ public class GameLoopManager : MonoBehaviour
         _waveFinished = state;
     }
 
-    public void SetEndWaveDialogueStarted(bool state)
+    public void PassToNextWave()
     {
-        _endWaveDialogueStarted = state;
+        SetWaveFinished(false);
+        _endWaveDialogueStarted = false;
+
+        _gameManager.DifficultyManager.SetNextWave();
     }
 
     public void ReloadGame()

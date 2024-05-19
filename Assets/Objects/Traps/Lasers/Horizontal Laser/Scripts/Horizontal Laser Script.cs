@@ -112,6 +112,8 @@ public class HorizontalLaserScript : MonoBehaviour
 [Serializable]
 public class HorizontalLaserParams
 {
+    public string Name;
+    [Space]
     [MinValue(0)] public float SpawnOffset;
     [MinValue(0)] public float LaserWidth;
     public AnimationCurve MovementCurve;

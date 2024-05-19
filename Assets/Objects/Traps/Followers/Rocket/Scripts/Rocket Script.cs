@@ -146,6 +146,8 @@ public class RocketScript : MonoBehaviour
 [Serializable]
 public class RocketParams
 {
+    public string Name;
+    [Space]
     [MinValue(0)] public float SpawnOffset;
     [Space]
     [MinValue(0)] public float MovementSpeedStart;

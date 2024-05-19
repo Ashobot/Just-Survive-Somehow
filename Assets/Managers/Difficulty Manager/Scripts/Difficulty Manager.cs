@@ -27,6 +27,9 @@ public class DifficultyManager : MonoBehaviour
 
     private void Update()
     {
+        if (!_gameManager.GameLoopManager.GameStarted)
+            return;
+
         if (!_gameManager.GameLoopManager.WaveFinished && !_gameManager.PlayerController.PlayerTrigger.IsDead)
         {
             RefreshTrapSpawnRate();
@@ -82,9 +85,12 @@ public class DifficultyManager : MonoBehaviour
 [Serializable]
 public class DifficultyParams
 {
+    public string Name;
+    [Space]
     [MinValue(0), Suffix("Seconds")] public float WaveDuration;
-    [MinValue(0)] public float ArenaSize;
     public Trap[] Traps; 
+    [Space]
+    public WaveTrapTypes WaveTrapTypes;
     [Space]
     public AnimationCurve TrapSpawnRateCurve;
     [MinValue(0), Suffix("Per second")] public float TrapSpawnRateMin;

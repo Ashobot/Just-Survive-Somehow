@@ -167,6 +167,8 @@ public class BearTrapScript : MonoBehaviour
 [Serializable]
 public class BearTrapParams
 {
+    public string Name;
+    [Space]
     [MinValue(0)] public float SpawnYOffset;
     [MinValue(0)] public float SpawnRadius;
     public AnimationCurve FallCurve;

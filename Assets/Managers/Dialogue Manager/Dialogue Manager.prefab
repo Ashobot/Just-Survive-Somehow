@@ -44,13 +44,67 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a16b1cce7df79f4190a094587361547, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _timeBetweenChars: 0.1
-  _dialogues:
-  - Name: Wave 1
-    EndWaveDialogues:
+  _timeBetweenChars: 0.05
+  _gameStartDialogue:
+    Name: Game Start
+    Dialogues:
     - Name: 
       PercentChance: 100
+      OnEndEvent:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 0}
+            m_TargetAssemblyTypeName: GameLoopManager, Assembly-CSharp
+            m_MethodName: PassToNextWave
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
+          - m_Target: {fileID: 0}
+            m_TargetAssemblyTypeName: GameLoopManager, Assembly-CSharp
+            m_MethodName: SetGameStarted
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
       Lines:
-      - gg mec
-      - T'es trop fort
-      - "Bien jou\xE9"
+      - "H\xE9h\xE9h\xE9... Voil\xE0 mon nouveau jouet."
+      - Tu as peur ? Ne t'en fais pas...
+      - "La pire chose qu'il peut t'arriver ici, c'est la mort. H\xE9h\xE9h\xE9..."
+      - N'essaie pas de t'enfuir, c'est impossible. Pas la peine d'essayer.
+      - Tout ce que tu peut faire pour l'instant, c'est SURVIVRE.
+      - "H\xE9h\xE9h\xE9h\xE9h\xE9... Tu veux dancer?"
+      - Non? C'est pas grave, tu vas vite changer d'avis...
+      - Bon, fini de discuter, c'est le moment de s'amuser !
+      - "Bonne chance, et fait de ton mieux... H\xE9h\xE9h\xE9h\xE9..."
+  _endWaveDialogues:
+  - Name: First wave end
+    Dialogues:
+    - Name: 
+      PercentChance: 100
+      OnEndEvent:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 0}
+            m_TargetAssemblyTypeName: GameLoopManager, Assembly-CSharp
+            m_MethodName: PassToNextWave
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+      Lines: []

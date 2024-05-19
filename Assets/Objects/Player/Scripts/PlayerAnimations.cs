@@ -25,19 +25,7 @@ public class PlayerAnimations : MonoBehaviour
     {
         if (!_controller.PlayerTrigger.IsDead)
         {
-            ManageAnimatorParameters();
-            ManageFlipX();      
-        }
-    }
-
-    void ManageFlipX()
-    {
-        if (_controller.PlayerMovement.IsMoving)
-        {
-            if(_inputsManager.MoveInput.x > 0)
-                _spriteRenderer.flipX = false;
-            else if(_inputsManager.MoveInput.x < 0)
-                _spriteRenderer.flipX = true;
+            ManageAnimatorParameters();    
         }
     }
 
@@ -46,12 +34,8 @@ public class PlayerAnimations : MonoBehaviour
         _animator.SetBool("IsMoving", _controller.PlayerMovement.IsMoving);
         _animator.SetBool("IsDashing", _controller.PlayerMovement.IsDashing);
 
-        _animator.SetFloat("MovementX", Mathf.Clamp(Mathf.Abs(_inputsManager.MoveInput.x), 0.01f, 1f));
-
-        if(_controller.PlayerMovement.IsMoving || _controller.PlayerMovement.IsDashing)
-            _animator.SetFloat("MovementY", _inputsManager.MoveInput.y);
-        else
-            _animator.SetFloat("MovementY", (_controller.PlayerMovement.LastY > 0 ? 1 : -1));
+        _animator.SetFloat("MovementX", _controller.PlayerMovement.LastDirection.x);
+        _animator.SetFloat("MovementY", _controller.PlayerMovement.LastDirection.y);
     }
 
     public void SetDeathAnimation()

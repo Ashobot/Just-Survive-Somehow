@@ -1,6 +1,6 @@
 using UnityEngine;
-using System.Collections.Generic;
 using UltimateAttributesPack;
+using EZCameraShake;
 
 public class PlayerTriggers : MonoBehaviour
 {
@@ -50,6 +50,12 @@ public class PlayerTriggers : MonoBehaviour
 
     public void SetDamage()
     {
+        if (_isDead)
+            return;
+
+        // Shake camera when damage
+        CameraShaker.Instance.ShakeOnce(6f, 3f, 0.2f, 0.2f);
+
         // If we are risking death, the die
         if (_isDamaged)
             Death();
