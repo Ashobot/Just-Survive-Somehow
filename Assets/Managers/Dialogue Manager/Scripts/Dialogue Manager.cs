@@ -35,6 +35,8 @@ public class DialogueManager : MonoBehaviour
     // Start a random end wave dialogue of wave
     public void StartRandomEndWaveDialogue(int waveIndex)
     {
+        waveIndex = Mathf.Clamp(waveIndex, 0, _endWaveDialogues.Length - 1);
+
         // Calculate max chance
         float maxChance = 0;
         foreach (DialogueParams dialogue in _endWaveDialogues[waveIndex].Dialogues)
@@ -62,10 +64,10 @@ public class DialogueManager : MonoBehaviour
 
     void StartDialogue(DialogueType dialogueType, int waveIndex, int dialogueIndex)
     {
-        _gameManager.UIManager.ClearDialogueText();
-        StartCoroutine(_gameManager.UIManager.DialogueShowAnimation());
-
         _inDialogue = true;
+
+        _gameManager.UIManager.ClearDialogueText();
+        _gameManager.UIManager.DialogueShowAnimation();
 
         _currentDialogueType = dialogueType;
         _currentWaveIndex = waveIndex;
@@ -86,10 +88,10 @@ public class DialogueManager : MonoBehaviour
         switch (_currentDialogueType)
         {
             case DialogueType.GameStart:
-                currentDialogueLine = _gameStartDialogue.Dialogues[_currentDialogueIndex].Lines[_currentLineIndex];
+                currentDialogueLine = _gameStartDialogue.Dialogues[_currentDialogueIndex].DialogueObject.Lines[_currentLineIndex];
                 break;
             case DialogueType.EndWave:
-                currentDialogueLine = _endWaveDialogues[_currentWaveIndex].Dialogues[_currentDialogueIndex].Lines[_currentLineIndex];
+                currentDialogueLine = _endWaveDialogues[_currentWaveIndex].Dialogues[_currentDialogueIndex].DialogueObject.Lines[_currentLineIndex];
                 break;
         }
         
@@ -118,12 +120,12 @@ public class DialogueManager : MonoBehaviour
         switch (_currentDialogueType)
         {
             case DialogueType.GameStart:
-                currentDialogueLine = _gameStartDialogue.Dialogues[_currentDialogueIndex].Lines[_currentLineIndex];
-                currentDialogueLineCount = _gameStartDialogue.Dialogues[_currentDialogueIndex].Lines.Length;
+                currentDialogueLine = _gameStartDialogue.Dialogues[_currentDialogueIndex].DialogueObject.Lines[_currentLineIndex];
+                currentDialogueLineCount = _gameStartDialogue.Dialogues[_currentDialogueIndex].DialogueObject.Lines.Length;
                 break;
             case DialogueType.EndWave:
-                currentDialogueLine = _endWaveDialogues[_currentWaveIndex].Dialogues[_currentDialogueIndex].Lines[_currentLineIndex];
-                currentDialogueLineCount = _endWaveDialogues[_currentWaveIndex].Dialogues[_currentDialogueIndex].Lines.Length;
+                currentDialogueLine = _endWaveDialogues[_currentWaveIndex].Dialogues[_currentDialogueIndex].DialogueObject.Lines[_currentLineIndex];
+                currentDialogueLineCount = _endWaveDialogues[_currentWaveIndex].Dialogues[_currentDialogueIndex].DialogueObject.Lines.Length;
                 break;
         }
 
@@ -152,7 +154,7 @@ public class DialogueManager : MonoBehaviour
 
     void EndDialogue()
     {
-        StartCoroutine(_gameManager.UIManager.DialogueHideAnimation());
+        _gameManager.UIManager.DialogueHideAnimation();
 
         _inDialogue = false;
 
@@ -190,7 +192,7 @@ public class Dialogue
 public class DialogueParams
 {
     public string Name;
+    public DialogueObject DialogueObject;
     [MinValue(0)] public float PercentChance;
     public UnityEvent OnEndEvent;
-    [TextArea] public string[] Lines;
 }

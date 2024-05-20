@@ -7,7 +7,7 @@ public class PlayerTriggers : MonoBehaviour
     GameManager _gameManager;
     PlayerController _playerController;
 
-    [Title("Death", "dark red")]
+    [Title("Death", "")]
     [SerializeField, Tag] string _deathZoneTag;
     [SerializeField] float _invincibleTime;
     [SerializeField] float _damagedTime;
@@ -20,6 +20,12 @@ public class PlayerTriggers : MonoBehaviour
     bool _isDead;
     public bool IsDead => _isDead;
     bool _isDamaged;
+
+    [SubTitle("Damage camera shake", "")]
+    [SerializeField] float _damageShakeMagnitude;
+    [SerializeField] float _damageShakeRoughness;
+    [SerializeField] float _damageShakeFadeInTime;
+    [SerializeField] float _damageShakeFadeOutTime;
 
     [Title("Slabs")]
     [SerializeField, Tag] string _slabTag;
@@ -54,7 +60,7 @@ public class PlayerTriggers : MonoBehaviour
             return;
 
         // Shake camera when damage
-        CameraShaker.Instance.ShakeOnce(6f, 3f, 0.2f, 0.2f);
+        CameraShaker.Instance.ShakeOnce(_damageShakeMagnitude, _damageShakeRoughness, _damageShakeFadeInTime, _damageShakeFadeOutTime);
 
         // If we are risking death, the die
         if (_isDamaged)

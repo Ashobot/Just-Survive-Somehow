@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b88cead130f22a24a882c25870ced1bb, type: 3}
+  m_Name: Dialogue -End Wave 2
+  m_EditorClassIdentifier: 
+  Lines:
+  - "Impr\xE9ssionant... H\xE9h\xE9h\xE9..."
+  - "Mais ne commence pas non plus \xE0 croire que c'est gagn\xE9 d'avance."
+  - "J'ai encore plein de trucs amusant \xE0 te montrer..."
+  - "Enfin, amusant pour moi en tout cas. H\xE9h\xE9h\xE9h\xE9h\xE9h\xE9..."
+  - "Pr\xE9pares tes r\xE9flexes, \xE7a va p\xE9ter !"
+  - "H\xE9h\xE9h\xE9..."

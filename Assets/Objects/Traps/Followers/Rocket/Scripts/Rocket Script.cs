@@ -6,7 +6,7 @@ public class RocketScript : MonoBehaviour
 {
     GameManager _gameManager;
     PlayerController _playerController;
-    RocketParams _trapParams;
+    RocketParamsObject _trapParams;
 
     [SerializeField] Transform _targetRotator;
     [SerializeField] LayerMask _playerLayerMask;
@@ -58,7 +58,7 @@ public class RocketScript : MonoBehaviour
     {
         float currentWavePercent = _gameManager.GameLoopManager.CurrentWavePercent;
 
-        _trapParams = _gameManager.TrapsManager.CurrentRocketParams;
+        _trapParams = _gameManager.TrapsManager.CurrentRocketParams.TrapParams;
         _currentMovementSpeed = Mathf.Lerp(_trapParams.MovementSpeedStart, _trapParams.MovementSpeedEnd, currentWavePercent);
         _currentRotationSpeed = Mathf.Lerp(_trapParams.RotationSpeedStart, _trapParams.RotationSpeedEnd, currentWavePercent);
     }
@@ -107,6 +107,8 @@ public class RocketScript : MonoBehaviour
     void ActivateObject()
     {
         _spriteRenderer.enabled = true;
+        _targetRotator.gameObject.SetActive(true);
+        _particleSystem.gameObject.SetActive(true);
     }
 
     void DestroyTrap()
@@ -146,13 +148,6 @@ public class RocketScript : MonoBehaviour
 [Serializable]
 public class RocketParams
 {
-    public string Name;
-    [Space]
-    [MinValue(0)] public float SpawnOffset;
-    [Space]
-    [MinValue(0)] public float MovementSpeedStart;
-    [MinValue(0)] public float MovementSpeedEnd;
-    [Space]
-    [MinValue(0)] public float RotationSpeedStart;
-    [MinValue(0)] public float RotationSpeedEnd;
+    public string WaveNumber;
+    public RocketParamsObject TrapParams;
 }

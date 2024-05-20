@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b88cead130f22a24a882c25870ced1bb, type: 3}
+  m_Name: Dialogue -End Wave 3
+  m_EditorClassIdentifier: 
+  Lines:
+  - C'est pas possible...
+  - "Comment t'as fais pour pas crever s\xE9rieux ?"
+  - "Bon, et bien dans ce cas l\xE0, on va rajouter quelques petites choses..."
+  - "Ne t'en fais pas, c'est inoffensif... Sauf si tu les touches... H\xE9h\xE9h\xE9..."
+  - "Je suis s\xFBr que tu peut les esquiver avec un peu de r\xE9flexes et de neurones."
+  - Allez, maintenant essaie de pas te faire bobo.
+  - Ce serait triste de rejoindre tonton Johnny maintenant...

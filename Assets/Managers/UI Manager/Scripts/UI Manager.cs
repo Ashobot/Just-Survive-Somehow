@@ -74,33 +74,24 @@ public class UIManager : MonoBehaviour
 
     // ----- Dialogues ----- //
 
-    public IEnumerator DialogueShowAnimation()
+    public void DialogueShowAnimation()
     {
-        float _timer = 0f;
-        _dialogueObject.transform.localScale = Vector2.zero;
-        _dialogueObject.SetActive(true);
+        SetDialogueState(true);
 
-        while(_timer < _dialogueShowHideTime)
-        {
-            _dialogueObject.transform.localScale = Vector2.Lerp(Vector2.zero, Vector2.one, _dialogueShowHideCurve.Evaluate(_timer / _dialogueShowHideTime));
-            _timer += Time.deltaTime;
-            yield return new WaitForEndOfFrame();
-        }
+        LeanTween.scale(_dialogueObject, Vector2.one, _dialogueShowHideTime);
     }
 
-    public IEnumerator DialogueHideAnimation()
+    public void DialogueHideAnimation()
     {
-        float _timer = 0f;
+        LeanTween.scale(_dialogueObject, Vector2.zero, _dialogueShowHideTime);
 
-        while (_timer < _dialogueShowHideTime)
-        {
-            _dialogueObject.transform.localScale = Vector2.Lerp(Vector2.one, Vector2.zero, _dialogueShowHideCurve.Evaluate(_timer / _dialogueShowHideTime));
-            _timer += Time.deltaTime;
-            yield return new WaitForEndOfFrame();
-        }
+        SetDialogueState(false);
+    }
 
-        _dialogueObject.transform.localScale = Vector2.zero;
-        _dialogueObject.SetActive(false);
+    void SetDialogueState(bool state)
+    {
+        _dialogueObject.transform.localScale = state ? Vector2.one : Vector2.zero;
+        _dialogueObject.SetActive(state);
     }
 
     public void ClearDialogueText()

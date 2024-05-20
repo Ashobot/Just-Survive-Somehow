@@ -6,7 +6,7 @@ public class HorizontalLaserScript : MonoBehaviour
 {
     GameManager _gameManager;
     PlayerController _playerController;
-    HorizontalLaserParams _trapParams;
+    HorizontalLaserParamsObject _trapParams;
     SpriteRenderer _spriteRenderer;
 
     [SerializeField] LayerMask _playerLayerMask;
@@ -55,7 +55,7 @@ public class HorizontalLaserScript : MonoBehaviour
     {
         float currentWavePercent = _gameManager.GameLoopManager.CurrentWavePercent;
 
-        _trapParams = _gameManager.TrapsManager.CurrentHorizontalLaserParams;
+        _trapParams = _gameManager.TrapsManager.CurrentHorizontalLaserParams.TrapParams;
         _currentMovementTime = Mathf.Lerp(_trapParams.MovementTimeStart, _trapParams.MovementTimeEnd, currentWavePercent);
     }
 
@@ -112,12 +112,6 @@ public class HorizontalLaserScript : MonoBehaviour
 [Serializable]
 public class HorizontalLaserParams
 {
-    public string Name;
-    [Space]
-    [MinValue(0)] public float SpawnOffset;
-    [MinValue(0)] public float LaserWidth;
-    public AnimationCurve MovementCurve;
-    [Space]
-    [MinValue(0)] public float MovementTimeStart;
-    [MinValue(0)] public float MovementTimeEnd;
+    public string WaveNumber;
+    public HorizontalLaserParamsObject TrapParams;
 }

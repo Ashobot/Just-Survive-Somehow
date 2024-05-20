@@ -6,7 +6,7 @@ public class GameLoopManager : MonoBehaviour
 {
     GameManager _gameManager;
 
-    [SerializeField, ReadOnly] int _currentWaveIndex = -1;
+    [SerializeField] int _currentWaveIndex = -1;
     public int CurrentWaveIndex => _currentWaveIndex;
     [SerializeField, ProgressBar("", 0, 1, true)] float _currentWavePercent;
     public float CurrentWavePercent { get { return _currentWavePercent; } }
@@ -32,7 +32,7 @@ public class GameLoopManager : MonoBehaviour
     private void Start()
     {
         Time.timeScale = 1;      
-        _currentWaveIndex = -1;
+        //_currentWaveIndex = -1;
     }
 
     public void SetGameStarted(bool state)

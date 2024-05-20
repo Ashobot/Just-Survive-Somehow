@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b88cead130f22a24a882c25870ced1bb, type: 3}
+  m_Name: Dialogue -End Wave 6
+  m_EditorClassIdentifier: 
+  Lines:
+  - BHAHAHAHAHAHAHA !!!
+  - "T'as aim\xE9 la blague hein? T'as aim\xE9?"
+  - "H\xE9h\xE9h\xE9h\xE9..."
+  - Bref, c'est bien beau les lasers, mais c'est pas tout.
+  - "J'ai une derni\xE8re petite chose \xE0 te montrer."
+  - "Allez, je te laisse d\xE9couvrir tout seul, comme un grand."

@@ -8,8 +8,8 @@ public class DifficultyManager : MonoBehaviour
 
     [HelpBox("All the difficulty parameters for each wave")]
     [SerializeField] DifficultyParams[] _difficultyParams;
-    DifficultyParams _currentDifficultyParams;
-    public DifficultyParams CurrentDifficultyParams { get { return _currentDifficultyParams; } }
+    DifficultyParamsObject _currentDifficultyParams;
+    public DifficultyParamsObject CurrentDifficultyParams { get { return _currentDifficultyParams; } }
     [Space]
     [SerializeField, ReadOnly] float _currentTrapSpawnRate;
     [SerializeField, ReadOnly] float _currentSpawnTimer;
@@ -22,7 +22,7 @@ public class DifficultyManager : MonoBehaviour
 
     private void Start()
     {
-        _currentDifficultyParams = _difficultyParams[0];
+        _currentDifficultyParams = _difficultyParams[0].DifficultyParamsObject;
     }
 
     private void Update()
@@ -44,7 +44,7 @@ public class DifficultyManager : MonoBehaviour
     {
         int newWaveIndex = Mathf.Clamp(_gameManager.GameLoopManager.CurrentWaveIndex + 1, 0, _difficultyParams.Length - 1);
         _gameManager.GameLoopManager.SetWave(newWaveIndex);
-        _currentDifficultyParams = _difficultyParams[newWaveIndex]; // Change difficulty params
+        _currentDifficultyParams = _difficultyParams[newWaveIndex].DifficultyParamsObject; // Change difficulty params
         _currentTrapSpawnRate = _currentDifficultyParams.TrapSpawnRateMin; // Set trap spawn rate to min of wave
         _gameManager.GameLoopManager.ResetWaveTimer(); // Set wave timer to 0
         _gameManager.TrapsManager.SetTrapsParamsLevel(newWaveIndex); // Set all traps params to the new difficulty level
@@ -86,13 +86,5 @@ public class DifficultyManager : MonoBehaviour
 public class DifficultyParams
 {
     public string Name;
-    [Space]
-    [MinValue(0), Suffix("Seconds")] public float WaveDuration;
-    public Trap[] Traps; 
-    [Space]
-    public WaveTrapTypes WaveTrapTypes;
-    [Space]
-    public AnimationCurve TrapSpawnRateCurve;
-    [MinValue(0), Suffix("Per second")] public float TrapSpawnRateMin;
-    [MinValue(0), Suffix("Per second")] public float TrapSpawnRateMax;
+    public DifficultyParamsObject DifficultyParamsObject;
 }

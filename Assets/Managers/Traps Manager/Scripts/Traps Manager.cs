@@ -39,45 +39,49 @@ public class TrapsManager : MonoBehaviour
     RocketParams _currentRocketParams;
     public RocketParams CurrentRocketParams => _currentRocketParams;
 
-
     private void Awake()
     {
         // Get game manager
         _gameManager = FindObjectOfType<GameManager>();
     }
 
-    public void SetTrapsParamsLevel(int levelIndex)
+    public void SetTrapsParamsLevel(int waveIndex)
     {
         // ----- Falling ----- //
 
         // Bear Trap
-        if (_bearTrapsParams[levelIndex] != null) _currentBearTrapsParams = _bearTrapsParams[levelIndex];
-        else Debug.LogWarning($"Bear Traps Params : difficulty level {levelIndex} is not set in Traps Manager");
+        foreach(BearTrapParams param in _bearTrapsParams)
+            if (param.WaveNumber == (waveIndex + 1).ToString())
+                _currentBearTrapsParams = param;
 
         // Bomb
-        if (_bombsParams[levelIndex] != null) _currentBombParams = _bombsParams[levelIndex];
-        else Debug.LogWarning($"Bomb Params : difficulty level {levelIndex} is not set in Traps Manager");
+        foreach (BombParams param in _bombsParams)
+            if (param.WaveNumber == (waveIndex + 1).ToString())
+                _currentBombParams = param;
 
         // ----- Lasers ----- //
 
         // Vertical Laser
-        if (_verticalLaserParams[levelIndex] != null) _currentVerticalLaserParams = _verticalLaserParams[levelIndex];
-        else Debug.LogWarning($"Vertical Laser Params : difficulty level {levelIndex} is not set in Traps Manager");
+        foreach (VerticalLaserParams param in _verticalLaserParams)
+            if (param.WaveNumber == (waveIndex + 1).ToString())
+                _currentVerticalLaserParams = param;
 
         // Horizontal Laser
-        if (_horizontalLaserParams[levelIndex] != null) _currentHorizontalLaserParams = _horizontalLaserParams[levelIndex];
-        else Debug.LogWarning($"Horizontal Laser Params : difficulty level {levelIndex} is not set in Traps Manager");
+        foreach (HorizontalLaserParams param in _horizontalLaserParams)
+            if (param.WaveNumber == (waveIndex + 1).ToString())
+                _currentHorizontalLaserParams = param;
 
         // ----- Followers ----- //
 
         // Rocket
-        if (_rocketParams[levelIndex] != null) _currentRocketParams = _rocketParams[levelIndex];
-        else Debug.LogWarning($"Rocket Params : difficulty level {levelIndex} is not set in Traps Manager");
+        foreach (RocketParams param in _rocketParams)
+            if (param.WaveNumber == (waveIndex + 1).ToString())
+                _currentRocketParams = param;
     }
 
     // ---------- Traps Spawn ---------- //
 
-    List<Trap> GetSpawnableTrapsList(DifficultyParams difficultyParams)
+    List<Trap> GetSpawnableTrapsList(DifficultyParamsObject difficultyParams)
     {
         List<Trap> spawnableTraps = new List<Trap>();
         int[] trapsPerCategories = new int[_gameManager.DifficultyManager.CurrentDifficultyParams.WaveTrapTypes.TrapCategories.Length];
@@ -118,7 +122,7 @@ public class TrapsManager : MonoBehaviour
         return spawnableTraps;
     }
 
-    public void SpawnRandomTrap(DifficultyParams difficultyParams)
+    public void SpawnRandomTrap(DifficultyParamsObject difficultyParams)
     {
         // Get spawnable traps
         List<Trap> spawnableTraps = GetSpawnableTrapsList(difficultyParams);
@@ -149,7 +153,6 @@ public class TrapsManager : MonoBehaviour
                 chancesSum += spawnableTraps[i].percentChance;
         }  
     }
-
 }
 
 // ----- Enums ----- //

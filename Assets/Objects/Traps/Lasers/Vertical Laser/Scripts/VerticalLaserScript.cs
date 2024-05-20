@@ -6,7 +6,7 @@ public class VerticalLaserScript : MonoBehaviour
 {
     GameManager _gameManager;
     PlayerController _playerController;
-    VerticalLaserParams _trapParams;
+    VerticalLaserParamsObject _trapParams;
     SpriteRenderer _spriteRenderer;
 
     [SerializeField] LayerMask _playerLayerMask;
@@ -55,7 +55,7 @@ public class VerticalLaserScript : MonoBehaviour
     {
         float currentWavePercent = _gameManager.GameLoopManager.CurrentWavePercent;
 
-        _trapParams = _gameManager.TrapsManager.CurrentVerticalLaserParams;
+        _trapParams = _gameManager.TrapsManager.CurrentVerticalLaserParams.TrapParams;
         _currentMovementTime = Mathf.Lerp(_trapParams.MovementTimeStart, _trapParams.MovementTimeEnd, currentWavePercent);
     }
 
@@ -112,12 +112,6 @@ public class VerticalLaserScript : MonoBehaviour
 [Serializable]
 public class VerticalLaserParams
 {
-    public string Name;
-    [Space]
-    [MinValue(0)] public float SpawnOffset;
-    [MinValue(0)] public float LaserWidth;
-    public AnimationCurve MovementCurve;
-    [Space]
-    [MinValue(0)] public float MovementTimeStart;
-    [MinValue(0)] public float MovementTimeEnd;
+    public string WaveNumber;
+    public VerticalLaserParamsObject TrapParams;
 }

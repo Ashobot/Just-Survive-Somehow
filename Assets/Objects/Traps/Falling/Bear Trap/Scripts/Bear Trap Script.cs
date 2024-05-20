@@ -6,7 +6,7 @@ public class BearTrapScript : MonoBehaviour
 {
     GameManager _gameManager;
     PlayerController _playerController;
-    BearTrapParams _trapParams;
+    BearTrapParamsObject _trapParams;
     CircleCollider2D _collider;
 
     [SerializeField] LayerMask _playerLayerMask;
@@ -18,6 +18,7 @@ public class BearTrapScript : MonoBehaviour
     [SerializeField] Animator _animator;
 
     Vector2 _startPosition;
+    bool _isAlreadyUsed;
     bool _playerOn;
     bool _atGround;
     bool _deployed;
@@ -104,7 +105,7 @@ public class BearTrapScript : MonoBehaviour
     {
         float currentWavePercent = _gameManager.GameLoopManager.CurrentWavePercent;
 
-        _trapParams = _gameManager.TrapsManager.CurrentBearTrapsParams;
+        _trapParams = _gameManager.TrapsManager.CurrentBearTrapsParams.TrapParams;
         _currentFallDuration = Mathf.Lerp(_trapParams.FallDurationStart, _trapParams.FallDurationEnd, currentWavePercent);
         _currentDeployDuration = Mathf.Lerp(_trapParams.DeployDurationStart, _trapParams.DeployDurationEnd, currentWavePercent);
         _currentDestroyDuration = Mathf.Lerp(_trapParams.DestroyDurationStart, _trapParams.DestroyDurationEnd, currentWavePercent);
@@ -131,8 +132,9 @@ public class BearTrapScript : MonoBehaviour
 
     void DamageToPlayer()
     {
-        if (_playerOn && _playerController.PlayerTrigger.CanTakeDamage)
+        if (_playerOn && _playerController.PlayerTrigger.CanTakeDamage && !_isAlreadyUsed)
         {
+            _isAlreadyUsed = true;
             _playerController.PlayerTrigger.SetDamage();
             _animator.SetBool("Damage", true);
         }
@@ -167,18 +169,6 @@ public class BearTrapScript : MonoBehaviour
 [Serializable]
 public class BearTrapParams
 {
-    public string Name;
-    [Space]
-    [MinValue(0)] public float SpawnYOffset;
-    [MinValue(0)] public float SpawnRadius;
-    public AnimationCurve FallCurve;
-    [Space]
-    [MinValue(0)] public float FallDurationStart;
-    [MinValue(0)] public float FallDurationEnd;
-    [Space]
-    [MinValue(0)] public float DeployDurationStart;
-    [MinValue(0)] public float DeployDurationEnd;
-    [Space]
-    [MinValue(0)] public float DestroyDurationStart;
-    [MinValue(0)] public float DestroyDurationEnd;
+    public string WaveNumber;
+    public BearTrapParamsObject TrapParams;
 }

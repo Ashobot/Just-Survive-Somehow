@@ -6,7 +6,7 @@ public class BombScript : MonoBehaviour
 {
     GameManager _gameManager;
     PlayerController _playerController;
-    BombParams _trapParams;
+    BombParamsObject _trapParams;
     CircleCollider2D _collider;
     SpriteRenderer _bombSpriteRenderer;
 
@@ -121,7 +121,7 @@ public class BombScript : MonoBehaviour
     {
         float currentWavePercent = _gameManager.GameLoopManager.CurrentWavePercent;
 
-        _trapParams = _gameManager.TrapsManager.CurrentBombParams;
+        _trapParams = _gameManager.TrapsManager.CurrentBombParams.TrapParams;
         _deathZone.transform.localScale = new Vector2(_trapParams.ExplosionRange, _trapParams.ExplosionRange);
         _deathZonePreview.transform.localScale = new Vector2(_trapParams.ExplosionRange, _trapParams.ExplosionRange);
         _currentFallDuration = Mathf.Lerp(_trapParams.FallDurationStart, _trapParams.FallDurationEnd, currentWavePercent);
@@ -153,8 +153,6 @@ public class BombScript : MonoBehaviour
         if (_playerOn && _playerController.PlayerTrigger.CanTakeDamage)
         {
             _playerController.PlayerTrigger.SetDamage();
-
-            // Explosion animation
         }
     }
 
@@ -187,19 +185,6 @@ public class BombScript : MonoBehaviour
 [Serializable]
 public class BombParams
 {
-    public string Name;
-    [Space]
-    [MinValue(0)] public float SpawnYOffset;
-    [MinValue(0)] public float SpawnRadius;
-    [MinValue(0)] public float ExplosionRange;
-    public AnimationCurve FallCurve;
-    [Space]
-    [MinValue(0)] public float FallDurationStart;
-    [MinValue(0)] public float FallDurationEnd;
-    [Space]
-    [MinValue(0)] public float ExplodeDurationStart;
-    [MinValue(0)] public float ExplodeDurationEnd;
-    [Space]
-    [MinValue(0)] public float ExplosionDurationStart;
-    [MinValue(0)] public float ExplosionDurationEnd;
+    public string WaveNumber;
+    public BombParamsObject TrapParams;
 }
