@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b88cead130f22a24a882c25870ced1bb, type: 3}
+  m_Name: Dialogue -End Wave 9
+  m_EditorClassIdentifier: 
+  Lines:
+  - "T'es vachement bal\xE8ze j'avoue."
+  - "Bien jou\xE9, t'as surv\xE9cu jusqu'ici."
+  - "Tu fais parti des rares personnes qui sont arriv\xE9 jusqu'au bout de mes pi\xE8ges."
+  - "F\xE9licitations... H\xE9h\xE9h\xE9h\xE9..."
+  - "Par contre, d\xE9sol\xE9 mec, mais tu vas VRAIMENT crever maintenant..."
+  - Sur ce, bonne mort mon pote...
+  - "Tu vas beaucoup me manquer... H\xE9h\xE9h\xE9..."

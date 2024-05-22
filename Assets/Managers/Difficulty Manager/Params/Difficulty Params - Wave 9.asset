@@ -10,38 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7afdb648ea4eff1459e0764155d16a43, type: 3}
-  m_Name: Difficulty Params - Wave 7
+  m_Name: Difficulty Params - Wave 9
   m_EditorClassIdentifier: 
   WaveDuration: 60
   Traps:
-  - Name: Laser Horizontal
-    Type: 1
-    TrapPrefab: {fileID: 3201523970001059526, guid: 403625fdf6996cc49a97e0b44d0b71a7, type: 3}
-    percentChance: 5
-  - Name: Laser Vertical
-    Type: 1
-    TrapPrefab: {fileID: 4234913643615043220, guid: a7da6c8579ca1f9498c96422ae26c9c1, type: 3}
-    percentChance: 5
-  - Name: Bear Trap
-    Type: 0
-    TrapPrefab: {fileID: 4024949272276544279, guid: 6054e9df246987747b80d702f81dc228, type: 3}
-    percentChance: 30
-  - Name: Bomb
-    Type: 0
-    TrapPrefab: {fileID: 8028334181432823470, guid: 3fb5b17188920774b8adffd86646a130, type: 3}
-    percentChance: 30
   - Name: Rocket
     Type: 2
     TrapPrefab: {fileID: 6386203581497379460, guid: 868141110bf6332478fda28a99dbb550, type: 3}
-    percentChance: 30
+    percentChance: 100
   WaveTrapTypes:
     TrapCategories:
-    - TrapType: 1
-      MaxCountInMap: 1
-    - TrapType: 0
-      MaxCountInMap: 50
     - TrapType: 2
-      MaxCountInMap: 10
+      MaxCountInMap: 50
   TrapSpawnRateCurve:
     serializedVersion: 2
     m_Curve:

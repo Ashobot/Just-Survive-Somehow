@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bf4b04469bb0cbd45bd04829dcae72c6, type: 3}
-  m_Name: Vertical Laser Params - Hard
+  m_Name: Vertical Laser Params - Impossible
   m_EditorClassIdentifier: 
-  SpawnOffset: 0
-  LaserWidth: 1
+  SpawnOffset: 2
+  LaserWidth: 5
   MovementCurve:
     serializedVersion: 2
     m_Curve:

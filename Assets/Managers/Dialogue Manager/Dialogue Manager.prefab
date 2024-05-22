@@ -49,6 +49,7 @@ MonoBehaviour:
     Name: Game Start
     Dialogues:
     - Name: 
+      DialogueObject: {fileID: 11400000, guid: 6729dea8dcd19ea4590b18471aed33d3, type: 2}
       PercentChance: 100
       OnEndEvent:
         m_PersistentCalls:
@@ -77,20 +78,31 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 1
             m_CallState: 2
-      Lines:
-      - "H\xE9h\xE9h\xE9... Voil\xE0 mon nouveau jouet."
-      - Tu as peur ? Ne t'en fais pas...
-      - "La pire chose qu'il peut t'arriver ici, c'est la mort. H\xE9h\xE9h\xE9..."
-      - N'essaie pas de t'enfuir, c'est impossible. Pas la peine d'essayer.
-      - Tout ce que tu peut faire pour l'instant, c'est SURVIVRE.
-      - "H\xE9h\xE9h\xE9h\xE9h\xE9... Tu veux dancer?"
-      - Non? C'est pas grave, tu vas vite changer d'avis...
-      - Bon, fini de discuter, c'est le moment de s'amuser !
-      - "Bonne chance, et fait de ton mieux... H\xE9h\xE9h\xE9h\xE9..."
   _endWaveDialogues:
-  - Name: First wave end
+  - Name: Wave 1 End
     Dialogues:
     - Name: 
+      DialogueObject: {fileID: 11400000, guid: 70023096f9018a748be7b4a75aa96536, type: 2}
+      PercentChance: 100
+      OnEndEvent:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 0}
+            m_TargetAssemblyTypeName: GameLoopManager, Assembly-CSharp
+            m_MethodName: PassToNextWave
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
+  - Name: Wave 2 End
+    Dialogues:
+    - Name: 
+      DialogueObject: {fileID: 11400000, guid: c238762e181fbc84c9330621a87c5ffd, type: 2}
       PercentChance: 100
       OnEndEvent:
         m_PersistentCalls:
@@ -107,4 +119,143 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
-      Lines: []
+  - Name: Wave 3 End
+    Dialogues:
+    - Name: 
+      DialogueObject: {fileID: 11400000, guid: 07e595c642625334881d44428fd97d3c, type: 2}
+      PercentChance: 100
+      OnEndEvent:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 0}
+            m_TargetAssemblyTypeName: GameLoopManager, Assembly-CSharp
+            m_MethodName: PassToNextWave
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+  - Name: Wave 4 End
+    Dialogues:
+    - Name: 
+      DialogueObject: {fileID: 11400000, guid: cd684cf31cb95494db6c6d2de841cd35, type: 2}
+      PercentChance: 100
+      OnEndEvent:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 0}
+            m_TargetAssemblyTypeName: GameLoopManager, Assembly-CSharp
+            m_MethodName: PassToNextWave
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+  - Name: Wave 5 End
+    Dialogues:
+    - Name: 
+      DialogueObject: {fileID: 11400000, guid: 6e3826c7871f5f74194ce502b9c1c0b4, type: 2}
+      PercentChance: 100
+      OnEndEvent:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 0}
+            m_TargetAssemblyTypeName: GameLoopManager, Assembly-CSharp
+            m_MethodName: PassToNextWave
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+  - Name: Wave 6 End
+    Dialogues:
+    - Name: 
+      DialogueObject: {fileID: 11400000, guid: 6662b39e62913974fabe8fa04add07e4, type: 2}
+      PercentChance: 100
+      OnEndEvent:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 0}
+            m_TargetAssemblyTypeName: GameLoopManager, Assembly-CSharp
+            m_MethodName: PassToNextWave
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+  - Name: Wave 7 End
+    Dialogues:
+    - Name: 
+      DialogueObject: {fileID: 11400000, guid: f94fde79705761d458f2411507b7de2e, type: 2}
+      PercentChance: 100
+      OnEndEvent:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 0}
+            m_TargetAssemblyTypeName: GameLoopManager, Assembly-CSharp
+            m_MethodName: PassToNextWave
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+  - Name: Wave 8 End
+    Dialogues:
+    - Name: 
+      DialogueObject: {fileID: 11400000, guid: f8a01ed3091faef4f8a09002c5b166c0, type: 2}
+      PercentChance: 100
+      OnEndEvent:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 0}
+            m_TargetAssemblyTypeName: GameLoopManager, Assembly-CSharp
+            m_MethodName: PassToNextWave
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+  - Name: Wave 9 End
+    Dialogues:
+    - Name: 
+      DialogueObject: {fileID: 11400000, guid: 72b14479debb9e04aa1ce037e7740fed, type: 2}
+      PercentChance: 100
+      OnEndEvent:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 0}
+            m_TargetAssemblyTypeName: GameLoopManager, Assembly-CSharp
+            m_MethodName: PassToNextWave
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2

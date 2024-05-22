@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7afdb648ea4eff1459e0764155d16a43, type: 3}
-  m_Name: Difficulty Params - Wave 7
+  m_Name: Difficulty Params - Wave 8
   m_EditorClassIdentifier: 
   WaveDuration: 60
   Traps:
@@ -25,15 +25,15 @@ MonoBehaviour:
   - Name: Bear Trap
     Type: 0
     TrapPrefab: {fileID: 4024949272276544279, guid: 6054e9df246987747b80d702f81dc228, type: 3}
-    percentChance: 30
+    percentChance: 25
   - Name: Bomb
     Type: 0
     TrapPrefab: {fileID: 8028334181432823470, guid: 3fb5b17188920774b8adffd86646a130, type: 3}
-    percentChance: 30
+    percentChance: 25
   - Name: Rocket
     Type: 2
     TrapPrefab: {fileID: 6386203581497379460, guid: 868141110bf6332478fda28a99dbb550, type: 3}
-    percentChance: 30
+    percentChance: 40
   WaveTrapTypes:
     TrapCategories:
     - TrapType: 1
@@ -41,7 +41,7 @@ MonoBehaviour:
     - TrapType: 0
       MaxCountInMap: 50
     - TrapType: 2
-      MaxCountInMap: 10
+      MaxCountInMap: 20
   TrapSpawnRateCurve:
     serializedVersion: 2
     m_Curve:
@@ -66,5 +66,5 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  TrapSpawnRateMin: 4
-  TrapSpawnRateMax: 6
+  TrapSpawnRateMin: 6
+  TrapSpawnRateMax: 8

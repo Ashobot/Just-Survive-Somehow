@@ -283,6 +283,10 @@ MonoBehaviour:
   _deathZoneTag: DeathZone
   _invincibleTime: 0.5
   _damagedTime: 3
+  _damageShakeMagnitude: 6
+  _damageShakeRoughness: 3
+  _damageShakeFadeInTime: 0.2
+  _damageShakeFadeOutTime: 0.2
   _slabTag: Slab
 --- !u!114 &3321515148220444733
 MonoBehaviour:

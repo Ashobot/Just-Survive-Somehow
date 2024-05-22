@@ -27,9 +27,32 @@ public class DialogueManager : MonoBehaviour
         _gameManager = FindObjectOfType<GameManager>();
     }
 
-    private void Start()
+    // Start a random game start dialogue
+    public void StartRandomGameStartDialogue()
     {
-        StartDialogue(DialogueType.GameStart, 0, 0);
+        // Calculate max chance
+        float maxChance = 0;
+        foreach (DialogueParams dialogue in _gameStartDialogue.Dialogues)
+            maxChance += dialogue.PercentChance;
+
+        // Chech if total chance is less than 100, else log warning
+        if (maxChance > 100)
+            Debug.LogWarning($"Dialogue total percent chance is more than 100 in game start dialogues");
+
+        float rand = UnityEngine.Random.Range(0, maxChance);
+        float chancesSum = 0;
+
+        // Get random dialogue and start it
+        for (int i = 0; i < _gameStartDialogue.Dialogues.Length; i++)
+        {
+            if (rand >= chancesSum && rand <= _gameStartDialogue.Dialogues[i].PercentChance + chancesSum)
+            {
+                StartDialogue(DialogueType.GameStart, 0, i); // Start new dialogue
+                return;
+            }
+            else
+                chancesSum += _gameStartDialogue.Dialogues[i].PercentChance;
+        }
     }
 
     // Start a random end wave dialogue of wave

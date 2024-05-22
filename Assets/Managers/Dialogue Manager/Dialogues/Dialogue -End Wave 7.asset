@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b88cead130f22a24a882c25870ced1bb, type: 3}
+  m_Name: Dialogue -End Wave 7
+  m_EditorClassIdentifier: 
+  Lines:
+  - "Franchement, j'aimerais pas \xEAtre \xE0 ta place..."
+  - "Enferm\xE9 dans cette pi\xE8ce sans issue..."
+  - "Etre oblig\xE9 d'esquiver des pi\xE8ges \xE0 longueur de journ\xE9e... H\xE9h\xE9h\xE9..."
+  - "Je comprends pas pourquoi tu continue d'esp\xE9rer comme \xE7a..."
+  - "Tu penses vraiment que je vais te laisser partir comme \xE7a?"
+  - "\xC9coutes, je sais que c'est difficile \xE0 accepter, mais tu vas mourrir aujourd'hui."
+  - "T'es pas ma premi\xE8re victime et tu seras pas la derni\xE8re... H\xE9h\xE9h\xE9..."
+  - "J'esp\xE8re au moins que t'as aim\xE9 risquer ta vie comme \xE7a."
+  - Allez, cette fois je te dit adieu pour de vrai...
+  - Salut mon pote...

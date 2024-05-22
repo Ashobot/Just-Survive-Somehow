@@ -45,42 +45,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _difficultyParams:
-  - Name: First wave
-    WaveDuration: 90
-    Traps:
-    - Name: Bear Trap
-      Type: 0
-      TrapPrefab: {fileID: 4024949272276544279, guid: 6054e9df246987747b80d702f81dc228, type: 3}
-      percentChance: 100
-    WaveTrapTypes:
-      TrapCategories:
-      - TrapType: 0
-        MaxCountInMap: 12
-    TrapSpawnRateCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    TrapSpawnRateMin: 1
-    TrapSpawnRateMax: 2
+  - Name: Wave 1
+    DifficultyParamsObject: {fileID: 11400000, guid: ab46c2476a50cbd4d8f35ac09bc88daf, type: 2}
+  - Name: Wave 2
+    DifficultyParamsObject: {fileID: 11400000, guid: 18cd3e8529cb84c48b826fb2df33cc7d, type: 2}
+  - Name: Wave 3
+    DifficultyParamsObject: {fileID: 11400000, guid: 18cd3e8529cb84c48b826fb2df33cc7d, type: 2}
+  - Name: Wave 4
+    DifficultyParamsObject: {fileID: 11400000, guid: a86bc1664cadeaf48844699e507a51e2, type: 2}
+  - Name: Wave 5
+    DifficultyParamsObject: {fileID: 11400000, guid: 4058e812c0f1a4541845c40f5338e70c, type: 2}
+  - Name: Wave 6
+    DifficultyParamsObject: {fileID: 11400000, guid: 96e837d87e6a51a40a5e8c8cc7c297f7, type: 2}
+  - Name: Wave 7
+    DifficultyParamsObject: {fileID: 11400000, guid: 51080425571f24846b9413d9706f9cf6, type: 2}
+  - Name: Wave 8
+    DifficultyParamsObject: {fileID: 11400000, guid: 24c9c9ae4cb57f74b9cf2671b8a39c8d, type: 2}
+  - Name: Wave 9
+    DifficultyParamsObject: {fileID: 11400000, guid: a279b1d094988dc44852ce836b54fcff, type: 2}
+  - Name: Wave 10
+    DifficultyParamsObject: {fileID: 11400000, guid: 9395fea2b06feee40a54e49f66199050, type: 2}
   _currentTrapSpawnRate: 0
   _currentSpawnTimer: 0

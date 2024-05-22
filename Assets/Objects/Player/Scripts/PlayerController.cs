@@ -27,5 +27,4 @@ public class PlayerController : MonoBehaviour
         _playerTriggers = GetComponent<PlayerTriggers>();
         _playerAnimations = GetComponent<PlayerAnimations>();
     }
-
 }

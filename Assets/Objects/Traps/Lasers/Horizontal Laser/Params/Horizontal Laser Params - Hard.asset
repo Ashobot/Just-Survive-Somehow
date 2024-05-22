@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Horizontal Laser Params - Hard
   m_EditorClassIdentifier: 
   SpawnOffset: 0
-  LaserWidth: 0.4
+  LaserWidth: 1
   MovementCurve:
     serializedVersion: 2
     m_Curve:

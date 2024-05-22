@@ -1,6 +1,7 @@
 using UnityEngine;
 using UltimateAttributesPack;
 using UnityEngine.SceneManagement;
+//using UnityEditor;
 
 public class GameLoopManager : MonoBehaviour
 {
@@ -20,20 +21,69 @@ public class GameLoopManager : MonoBehaviour
     public bool GameStarted => _gameStarted;
 
     [LineTitle("Scenes Manager")]
-    [SerializeField, Scene] int _gameSceneIndex;
+    [SerializeField, Scene] int _mainMenuScene;
+    [SerializeField, Scene] int _gameScene;
 
     private void Awake()
     {
-
         // Get game manager
         _gameManager = FindObjectOfType<GameManager>();
     }
 
     private void Start()
     {
+        LoadGame();
+
         Time.timeScale = 1;      
-        //_currentWaveIndex = -1;
     }
+
+    // ----------- SAVE ---------- //
+
+    void LoadGame()
+    {
+        if (PlayerPrefs.HasKey("Wave"))
+        {
+            int savedWaveIndex = PlayerPrefs.GetInt("Wave");
+            if (savedWaveIndex <= 0)
+            {
+                _currentWaveIndex =  -1;
+                _gameManager.DialogueManager.StartRandomGameStartDialogue();
+            }
+            else
+            {
+                _endWaveDialogueStarted = true;
+                SetWaveFinished(true);
+                SetGameStarted(true);
+                _currentWaveIndex = savedWaveIndex - 1;
+                _gameManager.DialogueManager.StartRandomEndWaveDialogue(savedWaveIndex - 1);
+            }
+        }
+        else
+        {
+            PlayerPrefs.SetInt("Wave", -1);
+            _currentWaveIndex = -1;
+
+            _gameManager.DialogueManager.StartRandomGameStartDialogue();
+        }
+    }
+
+    public void SaveGame()
+    {
+        PlayerPrefs.SetInt("Wave", _currentWaveIndex);
+    }
+
+    public void ResetSave()
+    {
+        PlayerPrefs.DeleteAll();
+    }
+
+    //[MenuItem("Prefs/Reset")]
+    //static void ResetPrefs()
+    //{
+    //    PlayerPrefs.DeleteAll();
+    //}
+
+    // ---------- WAVE ---------- //
 
     public void SetGameStarted(bool state)
     {
@@ -99,10 +149,17 @@ public class GameLoopManager : MonoBehaviour
         _endWaveDialogueStarted = false;
 
         _gameManager.DifficultyManager.SetNextWave();
+
+        SaveGame();
     }
 
-    public void ReloadGame()
+    public void LoadMainMenuScene()
+    {
+        SceneManager.LoadScene(_mainMenuScene);
+    }
+
+    public void LoadGameScene()
     {  
-        SceneManager.LoadScene(_gameSceneIndex);
+        SceneManager.LoadScene(_gameScene);
     }
 }

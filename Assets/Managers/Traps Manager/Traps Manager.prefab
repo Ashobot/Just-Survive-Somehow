@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1551468206169160968}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -45,142 +45,64 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _trapsParentObject: {fileID: 0}
-  _waveTrapCategories:
-  - TrapCategories:
-    - TrapType: 0
-      MaxCountInMap: 6
-    - TrapType: 1
-      MaxCountInMap: 2
-    - TrapType: 2
-      MaxCountInMap: 3
   _bearTrapsParams:
-  - SpawnYOffset: 4
-    SpawnRadius: 2
-    FallCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 2
-        outSlope: 2
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    FallDurationStart: 2
-    FallDurationEnd: 1.5
-    DeployDurationStart: 0.5
-    DeployDurationEnd: 0.3
-    DestroyDurationStart: 3
-    DestroyDurationEnd: 4
+  - WaveNumber: 1
+    TrapParams: {fileID: 11400000, guid: 92b2686986dc10345a8512ec404d5417, type: 2}
+  - WaveNumber: 2
+    TrapParams: {fileID: 11400000, guid: dfd6cd4d0d81d5540b7c99903ab5d4f8, type: 2}
+  - WaveNumber: 3
+    TrapParams: {fileID: 11400000, guid: 0fdaa208a45d60c4ba6bb32812d600c1, type: 2}
+  - WaveNumber: 4
+    TrapParams: {fileID: 11400000, guid: 0fdaa208a45d60c4ba6bb32812d600c1, type: 2}
+  - WaveNumber: 5
+    TrapParams: {fileID: 11400000, guid: 0fdaa208a45d60c4ba6bb32812d600c1, type: 2}
+  - WaveNumber: 7
+    TrapParams: {fileID: 11400000, guid: dfd6cd4d0d81d5540b7c99903ab5d4f8, type: 2}
+  - WaveNumber: 8
+    TrapParams: {fileID: 11400000, guid: 0fdaa208a45d60c4ba6bb32812d600c1, type: 2}
   _bombsParams:
-  - SpawnYOffset: 4
-    SpawnRadius: 2
-    ExplosionRange: 3
-    FallCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 2
-        outSlope: 2
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    FallDurationStart: 2
-    FallDurationEnd: 1.5
-    ExplodeDurationStart: 3
-    ExplodeDurationEnd: 2
-    ExplosionDurationStart: 0.1
-    ExplosionDurationEnd: 0.15
+  - WaveNumber: 2
+    TrapParams: {fileID: 11400000, guid: 5b3cf1b76bdd53d439ed5e93c24075f6, type: 2}
+  - WaveNumber: 3
+    TrapParams: {fileID: 11400000, guid: d67e349eda1228e4dafd98dfef6a22ac, type: 2}
+  - WaveNumber: 4
+    TrapParams: {fileID: 11400000, guid: f718b2394a98c5047a2789bc532f243a, type: 2}
+  - WaveNumber: 5
+    TrapParams: {fileID: 11400000, guid: f718b2394a98c5047a2789bc532f243a, type: 2}
+  - WaveNumber: 7
+    TrapParams: {fileID: 11400000, guid: d67e349eda1228e4dafd98dfef6a22ac, type: 2}
+  - WaveNumber: 8
+    TrapParams: {fileID: 11400000, guid: f718b2394a98c5047a2789bc532f243a, type: 2}
   _verticalLaserParams:
-  - SpawnOffset: 0
-    LaserWidth: 0.1
-    MovementCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    MovementTimeStart: 4
-    MovementTimeEnd: 3
+  - WaveNumber: 4
+    TrapParams: {fileID: 11400000, guid: 1225e2738ccfd814182d1eb37ad51158, type: 2}
+  - WaveNumber: 5
+    TrapParams: {fileID: 11400000, guid: 28af39d0995d96c4cb6071b8e8384d40, type: 2}
+  - WaveNumber: 6
+    TrapParams: {fileID: 11400000, guid: cc81ca3b4b3a3f74fb8b1f308f126b8f, type: 2}
+  - WaveNumber: 7
+    TrapParams: {fileID: 11400000, guid: 1225e2738ccfd814182d1eb37ad51158, type: 2}
+  - WaveNumber: 8
+    TrapParams: {fileID: 11400000, guid: 28af39d0995d96c4cb6071b8e8384d40, type: 2}
+  - WaveNumber: 10
+    TrapParams: {fileID: 11400000, guid: aa1fa67de8bbae2489436653867ca161, type: 2}
   _horizontalLaserParams:
-  - SpawnOffset: 0
-    LaserWidth: 0.1
-    MovementCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    MovementTimeStart: 4
-    MovementTimeEnd: 3
+  - WaveNumber: 4
+    TrapParams: {fileID: 11400000, guid: ccd83bc3eaea5dd44b697269e22ebfa7, type: 2}
+  - WaveNumber: 5
+    TrapParams: {fileID: 11400000, guid: d5203ce442f9896478e38da78c3a48a9, type: 2}
+  - WaveNumber: 6
+    TrapParams: {fileID: 11400000, guid: 61589c5f63a10f047accc2d983f598fe, type: 2}
+  - WaveNumber: 7
+    TrapParams: {fileID: 11400000, guid: ccd83bc3eaea5dd44b697269e22ebfa7, type: 2}
+  - WaveNumber: 8
+    TrapParams: {fileID: 11400000, guid: d5203ce442f9896478e38da78c3a48a9, type: 2}
+  - WaveNumber: 10
+    TrapParams: {fileID: 11400000, guid: 5a947ee6d9ec20f478c54a117135d0ad, type: 2}
   _rocketParams:
-  - SpawnOffset: 1
-    MovementSpeedStart: 5
-    MovementSpeedEnd: 6
-    RotationSpeedStart: 25
-    RotationSpeedEnd: 30
+  - WaveNumber: 7
+    TrapParams: {fileID: 11400000, guid: 42eb8b0f0cd798c478efdf967470d8e9, type: 2}
+  - WaveNumber: 8
+    TrapParams: {fileID: 11400000, guid: c3c294514d8442c4185a85d7402ed2de, type: 2}
+  - WaveNumber: 9
+    TrapParams: {fileID: 11400000, guid: 6a81744cd12775f488e413c8bb698335, type: 2}
