@@ -891,6 +891,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: UI Manager
       objectReference: {fileID: 0}
+    - target: {fileID: 1581527643484418949, guid: 92fd423e91f208945a05430e3cdab485, type: 3}
+      propertyPath: m_TargetGraphic
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2878953753754502277, guid: 92fd423e91f208945a05430e3cdab485, type: 3}
+      propertyPath: m_TargetGraphic
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 2878953753754502277, guid: 92fd423e91f208945a05430e3cdab485, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -940,6 +948,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5157303971439422358, guid: 92fd423e91f208945a05430e3cdab485, type: 3}
+      propertyPath: m_TargetGraphic
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5157303971439422358, guid: 92fd423e91f208945a05430e3cdab485, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1359566179}
@@ -948,9 +960,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1359566179}
     - target: {fileID: 7305501522645876339, guid: 92fd423e91f208945a05430e3cdab485, type: 3}
+      propertyPath: m_TargetGraphic
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7305501522645876339, guid: 92fd423e91f208945a05430e3cdab485, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1359566179}
+    - target: {fileID: 7509803214907375812, guid: 92fd423e91f208945a05430e3cdab485, type: 3}
+      propertyPath: m_TargetGraphic
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
