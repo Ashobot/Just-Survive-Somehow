@@ -10,10 +10,12 @@ public class DialogueManager : MonoBehaviour
     GameManager _gameManager;
 
     [SerializeField] float _timeBetweenChars;
+    [SerializeField] float _endDialogueCircleTime;
     [SerializeField] Dialogue _gameStartDialogue;
     [Space]
     [SerializeField] Dialogue[] _endWaveDialogues;
 
+    float _endDialogueCircleTimer;
     bool _inDialogue;
     DialogueType _currentDialogueType;
     int _currentWaveIndex = 0;
@@ -25,6 +27,34 @@ public class DialogueManager : MonoBehaviour
     private void Awake()
     {
         _gameManager = FindObjectOfType<GameManager>();
+    }
+
+    private void Update()
+    {
+        ManageEndDialogueCircle();
+    }
+
+    void ManageEndDialogueCircle()
+    {
+        if (_gameManager.InputsManager.EndDialogueInput && _inDialogue)
+        {
+            if(_endDialogueCircleTimer < _endDialogueCircleTime)
+            {
+                _gameManager.UIManager.SetEndDialogueCirclePercent(_endDialogueCircleTimer / _endDialogueCircleTime);
+                _endDialogueCircleTimer += Time.deltaTime;
+            }
+            else
+            {
+                _gameManager.UIManager.SetEndDialogueCirclePercent(0f);
+                _gameManager.DialogueManager.EndDialogue();
+                _endDialogueCircleTimer = 0f;
+            }
+        }
+        else
+        {
+            _endDialogueCircleTimer = 0f;
+            _gameManager.UIManager.SetEndDialogueCirclePercent(0f);
+        }
     }
 
     // Start a random game start dialogue

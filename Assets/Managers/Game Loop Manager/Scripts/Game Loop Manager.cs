@@ -83,6 +83,12 @@ public class GameLoopManager : MonoBehaviour
     //    PlayerPrefs.DeleteAll();
     //}
 
+    //[MenuItem("Prefs/Next Wave")]
+    //static void PrefsNextWave()
+    //{
+    //    PlayerPrefs.SetInt("Wave", PlayerPrefs.GetInt("Wave") + 1);
+    //}
+
     // ---------- WAVE ---------- //
 
     public void SetGameStarted(bool state)

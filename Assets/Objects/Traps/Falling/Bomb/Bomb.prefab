@@ -307,8 +307,13 @@ MonoBehaviour:
   _deathZonePreview: {fileID: 8877537140844499269}
   _deathZone: {fileID: 998635043895227060}
   _lerpToColor: {r: 1, g: 0, b: 0, a: 1}
+  _previewZoneLerpToColor: {r: 1, g: 0, b: 0, a: 1}
   _lerpToScale: {x: 1.5, y: 1.5}
   _explosionPrefab: {fileID: 7069669329284538381, guid: f22ea4e77c480da408b4bb3cec077905, type: 3}
+  _fallingSoundMaxVolume: 0.5
+  _fallingSound: {fileID: 8300000, guid: e16ebb292db88ae45b7bc545489512a1, type: 3}
+  _fuseSoundMaxVolume: 0.4
+  _fuseSound: {fileID: 8300000, guid: 5ec25005670e9ed4e9d4881ea9a1f1bc, type: 3}
 --- !u!50 &5482622353194250221
 Rigidbody2D:
   serializedVersion: 4

@@ -4917,6 +4917,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64bc22708b346d947a0ba6eee94f1501, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _explosionSounds:
+  - {fileID: 8300000, guid: 3e3f8c2605117bc4a8a5304b0dbe83fe, type: 3}
+  - {fileID: 8300000, guid: a91d73de2afb84849a54a5cf2743991c, type: 3}
+  - {fileID: 8300000, guid: 143fd15e5260e5e42ad99b61fc2e0c56, type: 3}
+  - {fileID: 8300000, guid: 28584ed30af5a314f967147bad9d5d65, type: 3}
+  _maxSoundVolume: 0.15
   _camShakeMagnitude: 6
   _camShakeRoughness: 3
   _camShakeFadeInTime: 0.2

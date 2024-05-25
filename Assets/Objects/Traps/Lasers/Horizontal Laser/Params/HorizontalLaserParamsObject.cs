@@ -5,6 +5,7 @@ using UltimateAttributesPack;
 public class HorizontalLaserParamsObject : ScriptableObject
 {
     [MinValue(0)] public float SpawnOffset;
+    [MinValue(0)] public float WarningDuration;
     [MinValue(0)] public float LaserWidth;
     public AnimationCurve MovementCurve;
     [Space]

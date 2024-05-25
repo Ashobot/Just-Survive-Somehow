@@ -160,3 +160,7 @@ MonoBehaviour:
   _playerLayerMask:
     serializedVersion: 2
     m_Bits: 8
+  _warningPrefab: {fileID: 4263163290554444518, guid: 6d91f25d8e78e254a88e978692ad184e, type: 3}
+  _warningOffset: 3
+  _laserSoundMaxVolume: 0.5
+  _laserSound: {fileID: 8300000, guid: 778c52186565cbe4ead5cd01fee963c2, type: 3}

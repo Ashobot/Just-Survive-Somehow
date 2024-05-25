@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SpawnYOffset: 4
   SpawnRadius: 10
-  ExplosionRange: 5
+  ExplosionRange: 6
   FallCurve:
     serializedVersion: 2
     m_Curve:
@@ -39,9 +39,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  FallDurationStart: 0.5
+  FallDurationStart: 0.4
   FallDurationEnd: 0.2
-  ExplodeDurationStart: 2
-  ExplodeDurationEnd: 1.5
-  ExplosionDurationStart: 0.1
-  ExplosionDurationEnd: 0.15
+  ExplodeDurationStart: 1.5
+  ExplodeDurationEnd: 1
+  ExplosionDurationStart: 0.15
+  ExplosionDurationEnd: 0.2

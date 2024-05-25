@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Vertical Laser Params - Impossible
   m_EditorClassIdentifier: 
   SpawnOffset: 2
+  WarningDuration: 0.1
   LaserWidth: 5
   MovementCurve:
     serializedVersion: 2

@@ -10,11 +10,18 @@ public class MenuManager : MonoBehaviour
     [SerializeField, Scene] int _mainMenuScene;
     [SerializeField, Scene] int _gameScene;
     [Space]
+    [LineTitle("Main Menu")]
+    [SerializeField] GameObject _mainMenuObject;
+    [Space]
     [SerializeField] Button _btnContinue;
     [SerializeField] TextMeshProUGUI _btnContinueText;
     [Space]
     [SerializeField] Button _btnRestart;
     [SerializeField] TextMeshProUGUI _btnRestartText;
+    [Space]
+    [LineTitle("Crédits")]
+    [SerializeField] GameObject _creditsObject;
+    [SerializeField] GameObject _creditsFirstSelectedObject;
 
     void Start()
     {
@@ -31,6 +38,23 @@ public class MenuManager : MonoBehaviour
 
             SetFirstSelectedObject(_btnRestart.gameObject);
         }
+    }
+
+    public void SetMainMenu(bool state)
+    {
+        _mainMenuObject.SetActive(state);
+        if (state)
+        {
+            GameObject firstSelectedButton = _btnContinue.interactable ? _btnContinue.gameObject : _btnRestart.gameObject;
+            SetFirstSelectedObject(firstSelectedButton);
+        }
+    }
+
+    public void SetCredits(bool state)
+    {
+        _creditsObject.SetActive(state);
+        if (state)        
+            SetFirstSelectedObject(_creditsFirstSelectedObject);
     }
 
     public void QuitGame()

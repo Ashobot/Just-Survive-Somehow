@@ -1,6 +1,5 @@
 using UnityEngine;
 using System;
-using UltimateAttributesPack;
 
 public class VerticalLaserScript : MonoBehaviour
 {
@@ -9,13 +8,25 @@ public class VerticalLaserScript : MonoBehaviour
     VerticalLaserParamsObject _trapParams;
     SpriteRenderer _spriteRenderer;
 
-    [SerializeField] LayerMask _playerLayerMask;
+    SpriteRenderer _warningSpriteRenderer;
+    Animator _warningAnimator;
 
+    [SerializeField] LayerMask _playerLayerMask;
+    [SerializeField] GameObject _warningPrefab;
+    [SerializeField] float _warningOffset;
+    [Space]
+    [SerializeField] float _laserSoundMaxVolume;
+    [SerializeField] AudioClip _laserSound;
+    AudioSource _laserSoundAudioSource;
+
+    GameObject _warningInstance;
+    bool _warningFinished;
     bool _playerOn;
     float _startY;
     float _endY;
     float _currentMovementTime;
     float _currentMovementTimer;
+    float _warningTimer;
 
     private void Awake()
     {
@@ -36,18 +47,36 @@ public class VerticalLaserScript : MonoBehaviour
 
     private void Update()
     {
-        if(_currentMovementTimer < _currentMovementTime)
+        if (!_warningFinished)
         {
-            transform.position = new Vector2(0, Mathf.Lerp(_startY, _endY, _trapParams.MovementCurve.Evaluate(_currentMovementTimer / _currentMovementTime)));
+            if (_warningTimer < _trapParams.WarningDuration)
+            {
+                _warningTimer += Time.deltaTime;
+            }
+            else
+            {
+                Destroy(_warningInstance);
+                _warningFinished = true;
 
-            DamageToPlayer();
-
-            _currentMovementTimer += Time.deltaTime;
+                // Play laser sound
+                _laserSoundAudioSource = SoundManager.instance.PlaySound(_laserSound, transform, _laserSoundMaxVolume, looped: true);
+            }
         }
         else
         {
-            transform.position = new Vector2(0, _endY);
-            DestroyTrap();
+            if (_currentMovementTimer < _currentMovementTime)
+            {
+                transform.position = new Vector2(0, Mathf.Lerp(_startY, _endY, _trapParams.MovementCurve.Evaluate(_currentMovementTimer / _currentMovementTime)));
+
+                DamageToPlayer();
+
+                _currentMovementTimer += Time.deltaTime;
+            }
+            else
+            {
+                transform.position = new Vector2(0, _endY);
+                DestroyTrap();
+            }
         }
     }
 
@@ -66,6 +95,16 @@ public class VerticalLaserScript : MonoBehaviour
         _startY = rand >= 0.5f ? _gameManager.ArenaManager.WallUp.transform.position.y + _trapParams.SpawnOffset : _gameManager.ArenaManager.WallDown.transform.position.y - _trapParams.SpawnOffset;
         _endY = rand >= 0.5f ? _gameManager.ArenaManager.WallDown.transform.position.y - _trapParams.SpawnOffset : _gameManager.ArenaManager.WallUp.transform.position.y + _trapParams.SpawnOffset;
 
+        // Instanciate warning
+        Vector2 warningPosition = new Vector2(0f, (rand >= 0.5f ? _gameManager.ArenaManager.WallUp.transform.position.y - _warningOffset : _gameManager.ArenaManager.WallDown.transform.position.y + _warningOffset));
+        _warningInstance = Instantiate(_warningPrefab, warningPosition, Quaternion.identity);
+        _warningSpriteRenderer = _warningInstance.GetComponent<SpriteRenderer>();
+        _warningAnimator = _warningInstance.GetComponent<Animator>();
+        _warningAnimator.SetBool("IsUpDown", true); // Set warning animation
+
+        // Set warning flipX
+        _warningSpriteRenderer.flipY = rand >= 0.5f ? false : true;
+
         // Set laser position
         transform.position = new Vector2(0, _startY);
 
@@ -79,18 +118,18 @@ public class VerticalLaserScript : MonoBehaviour
         if (_playerOn && _playerController.PlayerTrigger.CanTakeDamage)
         {
             _playerController.PlayerTrigger.SetDamage();
-
-            // Animation
         }
     }
 
     void ActivateObject()
     {
         _spriteRenderer.enabled = true;
+        _warningInstance.SetActive(true);
     }
 
     void DestroyTrap()
     {
+        Destroy(_laserSoundAudioSource.gameObject);
         Destroy(gameObject);
     }
 

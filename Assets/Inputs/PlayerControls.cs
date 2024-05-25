@@ -243,6 +243,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""EndDialogue"",
+                    ""type"": ""Button"",
+                    ""id"": ""2d191312-4a21-4f04-a3f7-fc0ddf49f676"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -265,6 +274,28 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""NextLine"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""55c6d819-c678-45a8-a5e0-81e8bb2ff8cb"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""EndDialogue"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d2d59bce-1393-40c1-bec5-1feaeb28f077"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""EndDialogue"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -306,6 +337,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         // Dialogues
         m_Dialogues = asset.FindActionMap("Dialogues", throwIfNotFound: true);
         m_Dialogues_NextLine = m_Dialogues.FindAction("NextLine", throwIfNotFound: true);
+        m_Dialogues_EndDialogue = m_Dialogues.FindAction("EndDialogue", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -468,11 +500,13 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Dialogues;
     private List<IDialoguesActions> m_DialoguesActionsCallbackInterfaces = new List<IDialoguesActions>();
     private readonly InputAction m_Dialogues_NextLine;
+    private readonly InputAction m_Dialogues_EndDialogue;
     public struct DialoguesActions
     {
         private @PlayerControls m_Wrapper;
         public DialoguesActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @NextLine => m_Wrapper.m_Dialogues_NextLine;
+        public InputAction @EndDialogue => m_Wrapper.m_Dialogues_EndDialogue;
         public InputActionMap Get() { return m_Wrapper.m_Dialogues; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -485,6 +519,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @NextLine.started += instance.OnNextLine;
             @NextLine.performed += instance.OnNextLine;
             @NextLine.canceled += instance.OnNextLine;
+            @EndDialogue.started += instance.OnEndDialogue;
+            @EndDialogue.performed += instance.OnEndDialogue;
+            @EndDialogue.canceled += instance.OnEndDialogue;
         }
 
         private void UnregisterCallbacks(IDialoguesActions instance)
@@ -492,6 +529,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @NextLine.started -= instance.OnNextLine;
             @NextLine.performed -= instance.OnNextLine;
             @NextLine.canceled -= instance.OnNextLine;
+            @EndDialogue.started -= instance.OnEndDialogue;
+            @EndDialogue.performed -= instance.OnEndDialogue;
+            @EndDialogue.canceled -= instance.OnEndDialogue;
         }
 
         public void RemoveCallbacks(IDialoguesActions instance)
@@ -539,5 +579,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     public interface IDialoguesActions
     {
         void OnNextLine(InputAction.CallbackContext context);
+        void OnEndDialogue(InputAction.CallbackContext context);
     }
 }

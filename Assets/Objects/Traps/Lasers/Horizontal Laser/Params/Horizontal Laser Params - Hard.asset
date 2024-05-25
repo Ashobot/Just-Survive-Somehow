@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Horizontal Laser Params - Hard
   m_EditorClassIdentifier: 
   SpawnOffset: 0
+  WarningDuration: 0.5
   LaserWidth: 1
   MovementCurve:
     serializedVersion: 2

@@ -14,6 +14,11 @@ public class RocketScript : MonoBehaviour
     [Space]
     [SerializeField] ParticleSystem _particleSystem;
     [SerializeField] GameObject _explosionPrefab;
+    [Space]
+    [LineTitle("Sounds")]
+    [SerializeField] float _followingSoundMaxVolume;
+    [SerializeField] AudioClip _followingSound;
+    AudioSource _followingSoundSource;
 
     bool _destroyed = false;
     bool _onSpawnWall = true;
@@ -39,6 +44,9 @@ public class RocketScript : MonoBehaviour
     private void Start()
     {
         ActivateObject();
+
+        // Play following sound
+        _followingSoundSource = SoundManager.instance.PlaySound(_followingSound, transform, _followingSoundMaxVolume, looped : true);
     }
 
     private void Update()
@@ -49,9 +57,9 @@ public class RocketScript : MonoBehaviour
                 Destroy(gameObject);
         }
         else
-        {
+        {           
             Move();
-        }
+        }      
     }
 
     public void InitializeTrapParams()
@@ -102,6 +110,9 @@ public class RocketScript : MonoBehaviour
 
         // Move rocket
         transform.position += transform.up * _currentMovementSpeed * Time.deltaTime;
+
+        // Set sound position
+        _followingSoundSource.transform.position = transform.position;
     }
 
     void ActivateObject()
@@ -113,6 +124,7 @@ public class RocketScript : MonoBehaviour
 
     void DestroyTrap()
     {
+        Destroy(_followingSoundSource.gameObject);
         _boxCollider.enabled = false;
         _spriteRenderer.enabled = false;
         Instantiate(_explosionPrefab, transform.position, Quaternion.identity);

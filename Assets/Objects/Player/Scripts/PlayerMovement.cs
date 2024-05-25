@@ -60,7 +60,10 @@ public class PlayerMovement : MonoBehaviour
     public float DashLenght => _dashLenght;  
     [SerializeField, MinValue(0)] float _dashDuration = 0.25f;
     public float DashDuration => _dashDuration;
-    
+    [Space]
+    [SerializeField] float _dodgeRollSoundMaxVolume;
+    [SerializeField] AudioClip _dodgeRollClip;
+
     [LineTitle("Damaged", "white", "blue")]
     [SerializeField, MinValue(0)] float _damagedDashLenght;
     public float DamagedDashLenght => _damagedDashLenght;
@@ -195,6 +198,10 @@ public class PlayerMovement : MonoBehaviour
     {
         _startDashPos = transform.position;
         _endDashPos = _startDashPos + (_inputsManager.MoveInput * _currentDashLenght); // Calculate end dash position
+
+        // Play sound
+        SoundManager.instance.PlaySound(_dodgeRollClip, transform, _dodgeRollSoundMaxVolume, false, 0f);
+
         _isDashing = true;
         _canDash = false;
     }

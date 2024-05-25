@@ -15,11 +15,14 @@ public class InputsManager : MonoBehaviour
 
     // Movement inputs
 
-    public Vector2 MoveInput { get { return _moveInput; } }
+    public Vector2 MoveInput => _moveInput;
     [SerializeField, ReadOnly] Vector2 _moveInput;
 
-    public bool DashInput { get { return _dashInput; } }
+    public bool DashInput => _dashInput;
     [SerializeField, ReadOnly] bool _dashInput;
+
+    public bool EndDialogueInput => _endDialogueInput;
+    [SerializeField, ReadOnly] bool _endDialogueInput; 
 
     private void OnEnable()
     {
@@ -40,6 +43,9 @@ public class InputsManager : MonoBehaviour
 
         // Enable dialogues input
         _playerControls.Dialogues.NextLine.started += OnNextLine;
+
+        _playerControls.Dialogues.EndDialogue.started += OnStartEndDialogue;
+        _playerControls.Dialogues.EndDialogue.canceled += OnCancelEndDialogue;
     }
 
     private void OnDisable()
@@ -61,6 +67,9 @@ public class InputsManager : MonoBehaviour
 
         // Disable dialogues input
         _playerControls.Dialogues.NextLine.started -= OnNextLine;
+
+        _playerControls.Dialogues.EndDialogue.started -= OnStartEndDialogue;
+        _playerControls.Dialogues.EndDialogue.canceled -= OnCancelEndDialogue;
     }
 
     private void Awake()
@@ -122,6 +131,16 @@ public class InputsManager : MonoBehaviour
     void OnNextLine(InputAction.CallbackContext ctx)
     {
         _gameManager.DialogueManager.NextLine();
+    }
+
+    void OnStartEndDialogue(InputAction.CallbackContext ctx)
+    {
+        _endDialogueInput = true;
+    }
+
+    void OnCancelEndDialogue(InputAction.CallbackContext ctx)
+    {
+        _endDialogueInput = false;
     }
 
 }

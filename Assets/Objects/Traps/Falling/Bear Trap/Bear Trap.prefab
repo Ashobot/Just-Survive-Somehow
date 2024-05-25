@@ -154,6 +154,12 @@ MonoBehaviour:
   _trapObject: {fileID: 5736117166688885486}
   _deathZone: {fileID: 5871021151174921920}
   _animator: {fileID: 2667959165695241864}
+  _fallingSoundMaxVolume: 0.5
+  _fallingSound: {fileID: 8300000, guid: e16ebb292db88ae45b7bc545489512a1, type: 3}
+  _armingSoundMaxVolume: 0.4
+  _armingSound: {fileID: 8300000, guid: 5e621abb3bd82df4b83c27974c377aa6, type: 3}
+  _activationSoundMaxVolume: 0.6
+  _activationSound: {fileID: 8300000, guid: f33d2fc2036ec0f4cbcbe31d8ee28412, type: 3}
 --- !u!50 &3147753274165656702
 Rigidbody2D:
   serializedVersion: 4

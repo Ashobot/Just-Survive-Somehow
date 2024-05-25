@@ -11,6 +11,13 @@ public class PlayerTriggers : MonoBehaviour
     [SerializeField, Tag] string _deathZoneTag;
     [SerializeField] float _invincibleTime;
     [SerializeField] float _damagedTime;
+    [Space]
+    [LineTitle("Sounds")]
+    [SerializeField] float _damageSoundMaxVolume;
+    [SerializeField] AudioClip _damageSound;
+    [Space]
+    [SerializeField] float _deathSoundMaxVolume;
+    [SerializeField] AudioClip _deathSound;
 
     bool _canTakeDamage;
     public bool CanTakeDamage => _canTakeDamage;
@@ -67,6 +74,9 @@ public class PlayerTriggers : MonoBehaviour
             Death();
         else // If we are not risking death, then become invincible and activate risking death
         {
+            // Play damage sound
+            SoundManager.instance.PlaySound(_damageSound, transform, _damageSoundMaxVolume, false, 0f);
+
             _gameManager.UIManager.SetRinskingDeathImage(0f);
             _playerController.PlayerMovement.SetDamagedPercent(_playerController.PlayerMovement.DamagedMovementSpeed);
             _invincibleTimer = 0f;
@@ -114,6 +124,8 @@ public class PlayerTriggers : MonoBehaviour
     {
         if (!_isDead)
         {
+            SoundManager.instance.PlaySound(_deathSound, transform, _deathSoundMaxVolume, false, 0f);
+
             _gameManager.UIManager.SetDeathMenu(true);
             _playerController.PlayerAnimations.SetDeathAnimation();
             _isDead = true;

@@ -16,6 +16,16 @@ public class BearTrapScript : MonoBehaviour
     [SerializeField] GameObject _deathZone;
     [Space]
     [SerializeField] Animator _animator;
+    [Space]
+    [LineTitle("Sounds")]
+    [SerializeField] float _fallingSoundMaxVolume;
+    [SerializeField] AudioClip _fallingSound;
+    [Space]
+    [SerializeField] float _armingSoundMaxVolume;
+    [SerializeField] AudioClip _armingSound;
+    [Space]
+    [SerializeField] float _activationSoundMaxVolume;
+    [SerializeField] AudioClip _activationSound;
 
     Vector2 _startPosition;
     bool _isAlreadyUsed;
@@ -44,6 +54,9 @@ public class BearTrapScript : MonoBehaviour
     private void Start()
     {
         ActivateObject(); // Activate objects
+
+        // Play falling sound
+        SoundManager.instance.PlaySound(_fallingSound, transform, _fallingSoundMaxVolume, true, _currentFallDuration);
     }
 
     private void Update()
@@ -70,6 +83,9 @@ public class BearTrapScript : MonoBehaviour
                 _shadowObject.SetActive(false);
                 _collider.isTrigger = false;
                 _atGround = true;
+
+                // Play arming sound
+                SoundManager.instance.PlaySound(_armingSound, transform, _armingSoundMaxVolume, true, _currentDeployDuration);
 
                 _animator.SetBool("AtGround", true);
             }
@@ -134,6 +150,9 @@ public class BearTrapScript : MonoBehaviour
     {
         if (_playerOn && _playerController.PlayerTrigger.CanTakeDamage && !_isAlreadyUsed)
         {
+            // Play sound
+            SoundManager.instance.PlaySound(_activationSound, transform, _activationSoundMaxVolume, false, 0f);
+
             _isAlreadyUsed = true;
             _playerController.PlayerTrigger.SetDamage();
             _animator.SetBool("Damage", true);

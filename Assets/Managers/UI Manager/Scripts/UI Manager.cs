@@ -10,13 +10,23 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject _pauseMenuObj;
     [SerializeField] GameObject _pauseMenuFirstSelectedObj;
     bool _inPauseMenu;
-    public bool InPauseMenu { get { return _inPauseMenu; } }
+    public bool InPauseMenu => _inPauseMenu;
+
+    [LineTitle("Options")]
+    [SerializeField] GameObject _optionsMenuObj;
+    [SerializeField] GameObject _optionsMenuFirstSelectedObj;
+    [Space]
+    [SerializeField] Slider _masterVolumeSlider;
+    [SerializeField] Slider _musicVolumeSlider;
+    [SerializeField] Slider _soundFXVolumeSlider;
+    bool _inOptions;
+    public bool InOptions => _inOptions;
 
     [LineTitle("Death menu")]
     [SerializeField] GameObject _deathMenuObj;
     [SerializeField] GameObject _deathMenuFirstSelectedObj;
     bool _inDeathMenu;
-    public bool InDeathMenu { get { return _inDeathMenu; } }
+    public bool InDeathMenu => _inDeathMenu;
 
     [LineTitle("Risking Death Image")]
     [SerializeField] Image _riskingDeathImage;
@@ -32,6 +42,13 @@ public class UIManager : MonoBehaviour
     [Space]
     [SerializeField] float _dialogueShowHideTime;
     [SerializeField] AnimationCurve _dialogueShowHideCurve;
+    [Space]
+    [SerializeField] Image _endDialogueCircleImage;
+
+    private void Start()
+    {
+        InitializeOptionsValues();
+    }
 
     // ----- General Functions ----- //
 
@@ -51,9 +68,56 @@ public class UIManager : MonoBehaviour
             return;
 
         _pauseMenuObj.SetActive(state);
-        SetFirstSelectedObject(_pauseMenuFirstSelectedObj);
+        if (state)
+            SetFirstSelectedObject(_pauseMenuFirstSelectedObj);
         Time.timeScale = state ? 0 : 1; // Pause or unpause time
-        _inPauseMenu = state;
+
+        // Set sounds pause
+        SoundManager.instance.SetSoundsPause(state);
+    }
+
+    // ----- Options ----- //
+
+    void InitializeOptionsValues()
+    {
+        // Set master volume slider
+        if(PlayerPrefs.HasKey("Master Volume"))
+            _masterVolumeSlider.value = PlayerPrefs.GetFloat("Master Volume");
+        else
+        {
+            _masterVolumeSlider.value = 1f;
+            PlayerPrefs.SetFloat("Master Volume", 1f);
+        }
+
+        // Set music volume slider
+        if (PlayerPrefs.HasKey("Music Volume"))
+            _musicVolumeSlider.value = PlayerPrefs.GetFloat("Music Volume");
+        else
+        {
+            _musicVolumeSlider.value = 1f;
+            PlayerPrefs.SetFloat("Music Volume", 1f);
+        }
+
+        // Set sound fx volume slider
+        if (PlayerPrefs.HasKey("Sound FX Volume"))
+            _soundFXVolumeSlider.value = PlayerPrefs.GetFloat("Sound FX Volume");
+        else
+        {
+            _soundFXVolumeSlider.value = 1f;
+            PlayerPrefs.SetFloat("Sound FX Volume", 1f);
+        }
+    }
+
+    public void SetOptionsMenu(bool state)
+    {
+        _optionsMenuObj.SetActive(state);
+        if(state)
+            SetFirstSelectedObject(_optionsMenuFirstSelectedObj);
+        Time.timeScale = state ? 0 : 1; // Pause or unpause time
+        _inOptions = state;
+
+        // Set sounds pause
+        SoundManager.instance.SetSoundsPause(state);
     }
 
     // ----- Death ----- //
@@ -61,7 +125,8 @@ public class UIManager : MonoBehaviour
     public void SetDeathMenu(bool state)
     {
         _deathMenuObj.SetActive(state);
-        SetFirstSelectedObject(_deathMenuFirstSelectedObj);
+        if(state)
+            SetFirstSelectedObject(_deathMenuFirstSelectedObj);
         _inDeathMenu = state;
     }
 
@@ -105,5 +170,10 @@ public class UIManager : MonoBehaviour
     public void AddDialogueChar(char character)
     {
         _dialogueText.text += character;
+    }
+
+    public void SetEndDialogueCirclePercent(float percent)
+    {
+        _endDialogueCircleImage.fillAmount = Mathf.Clamp(percent, 0f, 1f);
     }
 }

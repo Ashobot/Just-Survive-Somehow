@@ -103,6 +103,8 @@ MonoBehaviour:
     m_Bits: 128
   _particleSystem: {fileID: 3860499772868089611}
   _explosionPrefab: {fileID: 7069669329284538381, guid: f22ea4e77c480da408b4bb3cec077905, type: 3}
+  _followingSoundMaxVolume: 0.3
+  _followingSound: {fileID: 8300000, guid: b564406d5270a7940ac180d927e96834, type: 3}
 --- !u!212 &8017307227788799043
 SpriteRenderer:
   m_ObjectHideFlags: 0

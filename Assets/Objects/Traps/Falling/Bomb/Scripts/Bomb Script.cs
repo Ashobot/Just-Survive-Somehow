@@ -9,6 +9,7 @@ public class BombScript : MonoBehaviour
     BombParamsObject _trapParams;
     CircleCollider2D _collider;
     SpriteRenderer _bombSpriteRenderer;
+    SpriteRenderer _previewZoneSpriteRenderer;
 
     [SerializeField] LayerMask _playerLayerMask;
     [Space]
@@ -17,9 +18,18 @@ public class BombScript : MonoBehaviour
     [SerializeField] GameObject _deathZonePreview;
     [SerializeField] GameObject _deathZone;
     [SerializeField] Color _lerpToColor;
+    [SerializeField] Color _previewZoneLerpToColor;
     [SerializeField] Vector2 _lerpToScale;
     [Space]
     [SerializeField] GameObject _explosionPrefab;
+    [Space]
+    [LineTitle("Sounds")]
+    [SerializeField] float _fallingSoundMaxVolume;
+    [SerializeField] AudioClip _fallingSound;
+    [Space]
+    [SerializeField] float _fuseSoundMaxVolume;
+    [SerializeField] AudioClip _fuseSound;
+    AudioSource _fuseSoundAudioSource;
 
     Vector2 _startPosition;
     bool _playerOn;
@@ -40,14 +50,18 @@ public class BombScript : MonoBehaviour
 
         _collider = GetComponent<CircleCollider2D>();
         _bombSpriteRenderer = _bombObject.GetComponent<SpriteRenderer>();
+        _previewZoneSpriteRenderer = _deathZonePreview.GetComponent<SpriteRenderer>();
 
         InitializeTrapParams(); // Set current trap params with current wave percent (difficulty)
         SetPositions(); // Set the object position and rotation at random
     }
 
     private void Start()
-    {
+    {      
         ActivateObject(); // Activate objects
+
+        // Play falling sound
+        SoundManager.instance.PlaySound(_fallingSound, transform, _fallingSoundMaxVolume, true, _currentFallDuration);
     }
 
     private void Update()
@@ -70,6 +84,9 @@ public class BombScript : MonoBehaviour
             }
             else
             {
+                // Play fuse sound
+                _fuseSoundAudioSource = SoundManager.instance.PlaySound(_fuseSound, transform, _fuseSoundMaxVolume, looped : true);
+
                 _bombObject.transform.position = _shadowObject.transform.position;
                 _shadowObject.SetActive(false);
                 _deathZonePreview.SetActive(true);
@@ -84,6 +101,7 @@ public class BombScript : MonoBehaviour
             {
                 // Lerp color of the bomb (from normal to red)
                 _bombSpriteRenderer.color = Color.Lerp(Color.white, _lerpToColor, _explodeTimer / _currentExplodeDuration);
+                _previewZoneSpriteRenderer.color = Color.Lerp(Color.white, _previewZoneLerpToColor, _explodeTimer / _currentExplodeDuration);
 
                 // Lerp scale of the bomb
                 _bombObject.transform.localScale = Vector3.Lerp(transform.localScale, _lerpToScale, _explodeTimer / _currentExplodeDuration);
@@ -92,7 +110,11 @@ public class BombScript : MonoBehaviour
             }
             else
             {
+                // Destroy fuse sound
+                Destroy(_fuseSoundAudioSource.gameObject);
+
                 _bombSpriteRenderer.color = _lerpToColor;
+                _previewZoneSpriteRenderer.color = _previewZoneLerpToColor;
 
                 // Instanciate explosion
                 Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
