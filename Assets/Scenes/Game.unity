@@ -1061,6 +1061,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 519420031}
+    - target: {fileID: 347301821302057181, guid: 92fd423e91f208945a05430e3cdab485, type: 3}
+      propertyPath: m_VertexColorAlwaysGammaSpace
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 748758575200530763, guid: 92fd423e91f208945a05430e3cdab485, type: 3}
       propertyPath: m_Name
       value: UI Manager
@@ -1137,6 +1141,10 @@ PrefabInstance:
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 484450721}
+    - target: {fileID: 8399324828165166074, guid: 92fd423e91f208945a05430e3cdab485, type: 3}
+      propertyPath: m_MatchWidthOrHeight
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8622593695682657375, guid: 92fd423e91f208945a05430e3cdab485, type: 3}
       propertyPath: _musicVolumeSlider
       value: 
